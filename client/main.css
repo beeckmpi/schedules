@@ -3,7 +3,7 @@ body
   margin: 0 0;
   padding: 0 0;
   font-family: 'Roboto', sans-serif;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: #E0E0E0;
 }
 header {
   background-color: #00897B;
@@ -102,10 +102,6 @@ thead tr {
 form.th {
   position: relative;
 }
-
-table {
-  max-width: 90%;
-}
 .dragCategory {
   position: relative;
   border: 2px solid #AAA;
@@ -133,7 +129,6 @@ table {
   width: 28%;
   z-index: 500;
   padding: 15px;
-  background-color: #9E9E9E;
   overflow-y: scroll;
 }
 Paper {

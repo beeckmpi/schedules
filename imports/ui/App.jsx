@@ -14,20 +14,27 @@ import DragCategory from './DragCategory.jsx';
 import ColumnHeader from './ColumnHeader.jsx';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import Slider from 'material-ui/Slider';
 // App component - represents the whole app
 
 const style = {
   margin: '12px 12px 12px 0px',
 };
 const style2 = {
-  padding: '15px 15px',
   display: 'inline-block',
 };
-const tableStyle = {
+const TabStyle = {
+  padding: "15px 15px",
+  display: 'inline-block',
+};
+const paperTableStyle = {
   minWidth: '50%',
   maxWidth: '70%'
 }
-
+const tableStyle = {
+  width: '100%'
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +42,7 @@ class App extends Component {
       templateTitle: '',
       templateTableHeader: '',
       templateType: 'Nr.',
+      rows: 5
     };
 
   }
@@ -57,6 +65,10 @@ class App extends Component {
     const id = event.target.id;
     this.setState({[id]: event.target.value});
   }
+  handleChange(event) {
+    const id = event.target.id;
+    this.setState({[id]: event.target.value});
+  }
   addColumn(event){
     event.preventDefault();
     Columns.insert({
@@ -71,6 +83,20 @@ class App extends Component {
       createdAt: new Date(), // current time
       dragCategoryTitle: '',
     });
+  }
+  renderRows() {
+    var text = [];
+    var rows = [];
+    var rowNr = this.state.rows;
+    rowNr = parseFloat(rowNr);
+    var columns = this.props.columns;
+    columns.forEach(function(item, index){
+      text.push(<TableRowColumn />);
+    });
+    for (var x = 0; x < rowNr; x++) {
+      rows.push(<TableRow>{text}</TableRow>);
+    };
+    return rows;
   }
   renderColumnHeaders() {
     return this.props.columns.map((column) => (
@@ -99,43 +125,53 @@ class App extends Component {
         <div className="container">
           <div className="sidebar-editor">
             <Paper zDepth={3} style={style2} >
-
-            <div>
-              <TextField floatingLabelText="Template title" id='templateTitle' value={this.state.templateTitle} onChange={this.handleChange.bind(this)} defaultValue={this.state.templateTitle} />
-            </div>
-            <div>
-              <input type="text" placeholder="Table Header Title" id='templateTableHeader' value={this.state.value} onChange={this.handleChange.bind(this)}/>
-            </div>
-            <div>
-              <label>Template Type:</label>
-              <select
-                name="templateType" id="templateType" onChange={this.handleChange.bind(this)}
-               >
-                 <option value="Nr.">Numeric</option>
-                 <option value="Hour">Hourly</option>
-                 <option value="Day">Daily</option>
-                 <option value="Weeknr.">Weekly</option>
-                 <option value="Month">monthly</option>
-                 <option value="Custom">Custom (select amount of rows)</option>
-               </select>
-             </div>
-             <div>
-               <label>Show rows:</label>
-               <select
-                 name="rows" id="rows" onChange={this.handleChange.bind(this)}
-                >
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="15">15</option>
-                  <option value="20">20</option>
-                  <option value="40">40</option>
-                </select>
-              </div>
-             <div>
-                <RaisedButton onClick={this.addColumn.bind(this)} primary={true} label="Add Column" style={style} />
-             </div>
-             <div>{this.renderColumns()}</div>
-           </Paper>
+              <Tabs>
+                <Tab label="Table">
+                  <section style={{padding: '4px 15px 15px 15px'}}>
+                    <div>
+                      <TextField floatingLabelText="Template title" id='templateTitle' value={this.state.templateTitle} onChange={this.handleChange.bind(this)} defaultValue={this.state.templateTitle} />
+                    </div>
+                    <div>
+                      <input type="text" placeholder="Table Header Title" id='templateTableHeader' value={this.state.value} onChange={this.handleChange.bind(this)}/>
+                    </div>
+                    <div>
+                      <label>Template Type:</label>
+                      <select name="templateType" id="templateType" onChange={this.handleChange.bind(this)} >
+                        <option value="Nr.">Numeric</option>
+                        <option value="Hour">Hourly</option>
+                        <option value="Day">Daily</option>
+                        <option value="Weeknr.">Weekly</option>
+                        <option value="Month">monthly</option>
+                        <option value="Custom">Custom (select amount of rows)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>Show rows:</label>
+                      <select
+                         name="rows" id="rows" onChange={this.handleChange.bind(this)}
+                        >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="40">40</option>
+                      </select>
+                    </div>
+                    <div>
+                      <RaisedButton onClick={this.addColumn.bind(this)} primary={true} label="Add Column" style={style} />
+                    </div>
+                    <div>{this.renderColumns()}</div>
+                  </section>
+                </Tab>
+                <Tab label="Categories" >
+                  <h5>Drag Categories</h5>
+                  <div className="seporator">
+                    <RaisedButton label="Add drag category" onClick={this.addDragCategory.bind(this)}  secondary={true}/>
+                  </div>
+                  {this.renderDragCategories()}
+                </Tab>
+              </Tabs>
+            </Paper>
           </div>
           <header>
            <div id="page-title">New Template</div>
@@ -144,8 +180,8 @@ class App extends Component {
             <h2>
              {this.state.templateTitle}
            </h2>
-           <section id="table" style={tableStyle}>
-            <Table id="templateTable">
+           <Paper id="table" style={paperTableStyle} zDepth={3}>
+            <Table id="templateTable" style={tableStyle}>
               <TableHeader>
                 <TableRow>
                   <TableRowColumn className="templateTableHeaderTitle" colSpan={this.props.columnCounter+1}>{this.state.templateTableHeader}</TableRowColumn>
@@ -156,18 +192,10 @@ class App extends Component {
                 </TableRow>
               </TableHeader>
               <TableBody>
-
+                {this.renderRows()}
               </TableBody>
             </Table>
-
-           </section>
-           <section id="Columns">
-             <h5>Drag Categories</h5>
-             <div className="seporator">
-               <RaisedButton label="Add drag category" onClick={this.addDragCategory.bind(this)}  secondary={true}/>
-             </div>
-             {this.renderDragCategories()}
-           </section>
+          </Paper>
         </section>
         </div>
 

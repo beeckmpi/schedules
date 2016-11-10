@@ -30,6 +30,7 @@ export default class Column extends Component {
       $set: { checked: !this.props.column.checked },
     });
   }
+  
   deleteThisColumn(event) {
     event.preventDefault();
     Columns.remove(this.props.column._id);
