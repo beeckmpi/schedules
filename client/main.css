@@ -1,0 +1,141 @@
+body
+{
+  margin: 0 0;
+  padding: 0 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: rgba(0, 0, 0, 0);
+}
+header {
+  background-color: #00897B;
+  color:#fff;
+  height: 40px;
+  padding: 10px 40px 2px;
+  box-shadow:0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+}
+#page-title {
+  font-size: 25px;
+  font-weight: bold;
+  font-stretch: expanded;
+  text-transform: uppercase;
+}
+
+#content {
+  width: 95%;
+  margin: 0 auto;
+}
+
+input {
+  padding: 6px 4px;
+  margin: 12px 12px 12px 0;
+  border-width: 0px 0px 0px 0px;
+  border-color: #03A9F4;
+  color: #004D40;
+  min-width: 243px;
+}
+
+
+input#templateTitle{
+  font-size: 25px;
+}
+
+select#templateType, select#rows {
+  min-width: auto;
+  margin-left: 15px;
+  background-color: #efefef;
+  border-radius: 3px;
+  padding: 5px 8px;
+}
+.inlineBlock {
+  display: inline-block;
+}
+select {
+  padding: 6px 0px;
+  margin: 12px 12px 12px 0;
+  border-width: 0px 0px 0px 0px;
+  border-color: #03A9F4;
+  color: #004D40;
+  min-width: 250px;
+}
+#templateTable {
+  min-width: 50%;
+  max-width: 70%;
+}
+.ColumnEdit {
+  position: relative;
+}
+th.templateType {
+  width: 70px;
+}
+table input, table select {
+  min-width: 150px;
+  margin: 4px 4px 4px 0;
+  width: 100%;
+}
+
+table select {
+  background-color: #efefef;
+}
+table {
+  border: 0px solid #BBB;
+  border-width: 1px 1px 1px 1px;
+  border-radius: 3px;
+}
+th, td {
+  position: relative;
+  padding: 0px 8px 4px 8px;
+}
+thead tr {
+  border-bottom: 2px solid #AAA;
+}
+
+.seporator {
+  margin: 15px 0;
+}
+
+.delete {
+  position: absolute;
+  right: 13px;
+  top: 8px;
+  color:#888;
+  cursor: pointer;
+}
+form.th {
+  position: relative;
+}
+
+table {
+  max-width: 90%;
+}
+.dragCategory {
+  position: relative;
+  border: 2px solid #AAA;
+}
+.column {
+  opacity: 1;
+}
+.column.new {
+  opacity: 0;
+}
+.column.addFadeOut {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.column.addFadeIn {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.sidebar-editor {
+  position: fixed;
+  bottom: 0px;
+  top:53px;
+  right: 0px;
+  width: 28%;
+  z-index: 500;
+  padding: 15px;
+  background-color: #9E9E9E;
+  overflow-y: scroll;
+}
+Paper {
+  padding: 15px;
+}
