@@ -39,6 +39,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tabs: 'b',
       templateTitle: '',
       templateTableHeader: '',
       templateType: 'Nr.',
@@ -125,8 +126,8 @@ class App extends Component {
         <div className="container">
           <div className="sidebar-editor">
             <Paper zDepth={3} style={style2} >
-              <Tabs>
-                <Tab label="Table">
+              <Tabs value={this.state.tabs} id="tabs" onChange={this.handleChange}>
+                <Tab label="Table" value="a">
                   <section style={{padding: '4px 15px 15px 15px'}}>
                     <div>
                       <TextField floatingLabelText="Template title" id='templateTitle' value={this.state.templateTitle} onChange={this.handleChange.bind(this)} defaultValue={this.state.templateTitle} />
@@ -163,12 +164,14 @@ class App extends Component {
                     <div>{this.renderColumns()}</div>
                   </section>
                 </Tab>
-                <Tab label="Categories" >
+                <Tab label="Categories" value="b" >
+                  <section style={{padding: '4px 15px 15px 15px'}}>
                   <h5>Drag Categories</h5>
-                  <div className="seporator">
-                    <RaisedButton label="Add drag category" onClick={this.addDragCategory.bind(this)}  secondary={true}/>
-                  </div>
-                  {this.renderDragCategories()}
+                    <div className="seporator">
+                      <RaisedButton label="Add drag category" onClick={this.addDragCategory.bind(this)}  secondary={true}/>
+                    </div>
+                    {this.renderDragCategories()}
+                  </section>
                 </Tab>
               </Tabs>
             </Paper>
