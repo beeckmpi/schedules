@@ -13,6 +13,8 @@ const paperTableStyle = {
   maxWidth: '70%',
   margin: '0 auto 20px auto',
   minHeight: '600px',
+  marginLeft: '310px',
+  marginTop: '15px',
   padding: '40px 40px'
 }
 export default class NotFoundPage extends Component {

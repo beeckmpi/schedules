@@ -34,7 +34,8 @@ const paperTableStyle = {
   marginBottom: '20px',
   marginLeft: '310px',
   minHeight: '600px',
-  padding: '40px 40px'
+  padding: '40px 40px',
+  marginTop: '15px'
 }
 const floatingButtonStyle = {
   alignSelf: 'flex-end'
