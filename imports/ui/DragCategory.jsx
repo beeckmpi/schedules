@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { DragCategories } from '../api/dragCategories.js';
+import TextField from 'material-ui/TextField';
 // template component - represents a single todo item
 const styles = {
   customWidth: {
@@ -8,6 +9,15 @@ const styles = {
   },
 };
 export default class dragCategory extends Component {
+  constructor(props) {
+    super(props);
+    this.optionsState = {value: 'draggable'};
+    this.textValue = [this.props.column._id]+'_value';
+    this.state = {
+      [this.props.column._id]: '',
+      [this.textValue]: this.props.column.columnTitle,
+    }
+  }
   deleteThisDragCategory(event) {
     event.preventDefault();
     DragCategories.remove(this.props.dragCategories._id);
@@ -23,7 +33,7 @@ export default class dragCategory extends Component {
             &times;
           </a>
           <div className="formInput input-field">
-            <input type="text" placeholder="Category Title" className="catName"></input>
+            <TextField floatingLabelText="Category Title" className="catName"  id={this.props.column._id} value={this.state[this.textValue]} onChange={this.handleChange.bind(this)} />
           </div>
         </div>
         <div>

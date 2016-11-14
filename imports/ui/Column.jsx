@@ -3,9 +3,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Columns } from '../api/columns.js';
 import Paper from 'material-ui/Paper';
 import Delete from 'material-ui/svg-icons/action/delete';
+import Create from 'material-ui/svg-icons/content/create';
 import IconButton from 'material-ui/IconButton';
 import {grey400, grey800} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 // template component - represents a single todo item
 const styles = {
   customWidth: {
@@ -23,6 +26,18 @@ const deleteStyle = {
   top: '12px',
   cursor: 'pointer'
 }
+const deleteStyleView = {
+  position: 'absolute',
+  right: '0px',
+  top: '-10px',
+  cursor: 'pointer'
+}
+const editStyleView = {
+  position: 'absolute',
+  right: '25px',
+  top: '-10px',
+  cursor: 'pointer'
+}
 export default class Column extends Component {
   toggleChecked() {
     // Set the checked property to the opposite of its current value
@@ -30,7 +45,7 @@ export default class Column extends Component {
       $set: { checked: !this.props.column.checked },
     });
   }
-  
+
   deleteThisColumn(event) {
     event.preventDefault();
     Columns.remove(this.props.column._id);
@@ -39,9 +54,22 @@ export default class Column extends Component {
     super(props);
     this.optionsState = {value: 'draggable'};
     this.textValue = [this.props.column._id]+'_value';
+    this.selectValue = [this.props.column._id]+'_selectValue';
+    this.edit = [this.props.column._id]+'_edit';
+    this.view = [this.props.column._id]+'_view';
+    if (this.props.column.saved){
+      this.viewVar = 'inherit';
+      this.editVar = 'none';
+    } else {
+      this.viewVar = 'none';
+      this.editVar = 'inherit';
+    }
     this.state = {
       [this.props.column._id]: '',
-      [this.textValue]: this.props.column.columnTitle
+      [this.textValue]: this.props.column.columnTitle,
+      [this.selectValue]: this.props.column.columnType,
+      [this.edit]: this.editVar,
+      [this.view]: this.viewVar
     }
   }
   handleChange(event) {
@@ -50,36 +78,66 @@ export default class Column extends Component {
       $set: {columnTitle: event.target.value}
     });
   }
-
   handleChangeSelect(event, index, value) {
-    this.setState({optionsState: value});
+    this.setState({[this.selectValue]: value});
+    Columns.update(this.props.column._id,{
+      $set: {columnType: value}
+    });
+  }
+  saveColumn(event){
+    this.setState({[this.edit]: 'none', [this.view]: 'inherit'});
+    Columns.update(this.props.column._id,{
+      $set: {saved: true}
+    });
+  }
+  editThisColumn(event) {
+    event.preventDefault();
+    this.setState({[this.edit]: 'inherit', [this.view]: 'none'});
+    Columns.update(this.props.column._id,{
+      $set: {saved: false}
+    });
   }
   render() {
     return (
       <Paper zDepth={2} style={style}>
-        <div className="ColumnEdit">
-          <IconButton tooltip="SVG Icon" style={deleteStyle} onClick={this.deleteThisColumn.bind(this)}>
-            <Delete color={grey400} hoverColor={grey800} />
-          </IconButton>
-          <div className="formInput input-field">
-            <TextField floatingLabelText="Column Title" hintText="Column Title" id={this.props.column._id} value={this.state[this.textValue]} onChange={this.handleChange.bind(this)} />
+        <section className="edit" style={{display: this.state[this.edit], width: '100%'}}>
+          <div className="ColumnEdit">
+            <IconButton tooltip="Delete Column" style={deleteStyle} onClick={this.deleteThisColumn.bind(this)}>
+              <Delete color={grey400} hoverColor={grey800} />
+            </IconButton>
+            <div className="formInput input-field">
+              <TextField floatingLabelText="Column Title" hintText="Column Title" id={this.props.column._id} value={this.state[this.textValue]} onChange={this.handleChange.bind(this)} />
+            </div>
           </div>
-        </div>
-          <div className="input-field">
-            <select name="typeColumn" onChange={this.handleChangeSelect}>
-              <option value="draggable">Draggable</option>
-              <option value="linkedDraggable">Linked Draggable</option>
-              <option value="fixedValue">Fixed value</option>
-              <option value="inputChbx">Input (checkbox)</option>
-              <option value="inputNum">Input (numeric)</option>
-              <option value="inputText">Input (text)</option>
-              <option value="select">Select</option>
-              <option value="splitColumn">Split Column</option>
-            </select>
-          </div>
-          <div className="formInput">
-            <RaisedButton primary={true} label="Save Column" />
-          </div>
+            <div>
+              <SelectField floatingLabelText="Type" value={this.state[this.selectValue]} onChange={this.handleChangeSelect.bind(this)} >
+                <MenuItem value={"Draggable"} primaryText="Draggable" />
+                <MenuItem value={"linkedDraggable"} primaryText="Linked Draggable" />
+                <MenuItem value={"fixedValue"} primaryText="Fixed value" />
+                <MenuItem value={"inputChbx"} primaryText="Input (checkbox)" />
+                <MenuItem value={"inputNum"} primaryText="Input (numeric)" />
+                <MenuItem value={"inputText"} primaryText="Input (text)" />
+                <MenuItem value={"select"} primaryText="Select" />
+                <MenuItem value={"splitColumn"} primaryText="Split Columne" />
+               </SelectField>
+            </div>
+            <div className="draggable">
+
+            </div>
+            <div className="formInput">
+              <RaisedButton primary={true} label="Save Column" onClick={this.saveColumn.bind(this)} />
+            </div>
+          </section>
+          <section className="view" style={{display: this.state[this.view], position: 'relative', width: '100%'}}>
+            <IconButton tooltip="Delete Column" style={deleteStyleView} onClick={this.deleteThisColumn.bind(this)}>
+              <Delete color={grey400} hoverColor={grey800} />
+            </IconButton>
+            <IconButton tooltip="Edit Column" style={editStyleView} onClick={this.editThisColumn.bind(this)}>
+              <Create color={grey400} hoverColor={grey800} />
+            </IconButton>
+            <div>{this.props.column.columnTitle}</div>
+            <div style={{fontSize: 'x-small'}}>{this.props.column.columnType}</div>
+          </section>
       </Paper>
     );
   }

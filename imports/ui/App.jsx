@@ -16,7 +16,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
+import AppBar from 'material-ui/AppBar';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 // App component - represents the whole app
+var injectTapEventPlugin = require("react-tap-event-plugin");
+injectTapEventPlugin();
 
 const style = {
   margin: '12px 12px 12px 0px',
@@ -30,16 +35,17 @@ const TabStyle = {
 };
 const paperTableStyle = {
   minWidth: '50%',
-  maxWidth: '70%'
+  maxWidth: '70%',
+  marginBottom: '20px'
 }
 const tableStyle = {
-  width: '100%'
+  width: '100%',
+
 }
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: 'b',
       templateTitle: '',
       templateTableHeader: '',
       templateType: 'Nr.',
@@ -66,9 +72,9 @@ class App extends Component {
     const id = event.target.id;
     this.setState({[id]: event.target.value});
   }
-  handleChange(event) {
-    const id = event.target.id;
-    this.setState({[id]: event.target.value});
+  handleChangeSelect(event, index, value) {
+    console.log(event);
+    this.setState({[event.target.id]: value});
   }
   addColumn(event){
     event.preventDefault();
@@ -76,6 +82,8 @@ class App extends Component {
       createdAt: new Date(), // current time
       columnTitle: '',
       columnType: 'draggable',
+      columnType: '',
+      saved: true
     });
   }
   addDragCategory(event){
@@ -92,10 +100,10 @@ class App extends Component {
     rowNr = parseFloat(rowNr);
     var columns = this.props.columns;
     columns.forEach(function(item, index){
-      text.push(<TableRowColumn />);
+      text.push(<TableRowColumn key={index} />);
     });
     for (var x = 0; x < rowNr; x++) {
-      rows.push(<TableRow>{text}</TableRow>);
+      rows.push(<TableRow key={x}>{text}</TableRow>);
     };
     return rows;
   }
@@ -126,25 +134,24 @@ class App extends Component {
         <div className="container">
           <div className="sidebar-editor">
             <Paper zDepth={3} style={style2} >
-              <Tabs value={this.state.tabs} id="tabs" onChange={this.handleChange}>
-                <Tab label="Table" value="a">
+              <Tabs >
+                <Tab label="Table">
                   <section style={{padding: '4px 15px 15px 15px'}}>
                     <div>
-                      <TextField floatingLabelText="Template title" id='templateTitle' value={this.state.templateTitle} onChange={this.handleChange.bind(this)} defaultValue={this.state.templateTitle} />
+                      <TextField floatingLabelText="Template title" style={{width: '100%'}} id={'templateTitle'} value={this.state.templateTitle} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div>
-                      <input type="text" placeholder="Table Header Title" id='templateTableHeader' value={this.state.value} onChange={this.handleChange.bind(this)}/>
+                      <TextField floatingLabelText="Table Header Title" style={{width: '100%'}} id='templateTableHeader' value={this.state.value} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div>
-                      <label>Template Type:</label>
-                      <select name="templateType" id="templateType" onChange={this.handleChange.bind(this)} >
-                        <option value="Nr.">Numeric</option>
-                        <option value="Hour">Hourly</option>
-                        <option value="Day">Daily</option>
-                        <option value="Weeknr.">Weekly</option>
-                        <option value="Month">monthly</option>
-                        <option value="Custom">Custom (select amount of rows)</option>
-                      </select>
+                      <SelectField floatingLabelText="Template Type" style={{width: '100%'}} value={this.state.templateType} id="templateType" onChange={this.handleChangeSelect.bind(this)} >
+                        <MenuItem value={"Nr."} primaryText="Numeric" />
+                        <MenuItem value={"Hour"} primaryText="Hourly" />
+                        <MenuItem value={"Day"} primaryText="Daily" />
+                        <MenuItem value={"Weeknr"} primaryText="Weekly" />
+                        <MenuItem value={"Month"} primaryText="monthly" />
+                        <MenuItem value={"Custom"} primaryText="Custom (select amount of rows)" />
+                       </SelectField>
                     </div>
                     <div>
                       <label>Show rows:</label>
@@ -164,7 +171,7 @@ class App extends Component {
                     <div>{this.renderColumns()}</div>
                   </section>
                 </Tab>
-                <Tab label="Categories" value="b" >
+                <Tab label="Categories" >
                   <section style={{padding: '4px 15px 15px 15px'}}>
                   <h5>Drag Categories</h5>
                     <div className="seporator">
@@ -176,16 +183,18 @@ class App extends Component {
               </Tabs>
             </Paper>
           </div>
-          <header>
-           <div id="page-title">New Template</div>
-          </header>
-          <section id="content">
+          <AppBar
+            title="New Template"
+            iconClassNameRight="muidocs-icon-navigation-expand-more"
+            style={{position: 'fixed'}}
+          />
+        <section id="content" style={{paddingTop: '60px'}}>
             <h2>
              {this.state.templateTitle}
            </h2>
            <Paper id="table" style={paperTableStyle} zDepth={3}>
             <Table id="templateTable" style={tableStyle}>
-              <TableHeader>
+              <TableHeader selectable={false}>
                 <TableRow>
                   <TableRowColumn className="templateTableHeaderTitle" colSpan={this.props.columnCounter+1}>{this.state.templateTableHeader}</TableRowColumn>
                 </TableRow>
@@ -211,7 +220,7 @@ App.propTypes = {
   templates: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   dragCategories:  PropTypes.array.isRequired,
-  columnCounter: PropTypes.array.isRequired,
+  columnCounter: PropTypes.number.isRequired,
 };
 
 export default createContainer(() => {
