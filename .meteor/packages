@@ -24,3 +24,4 @@ react
 cosmos:browserify
 shell-server@0.2.1
 msavin:mongol
+accounts-google

@@ -134,3 +134,12 @@ form.th {
 Paper {
   padding: 15px;
 }
+.bottomRightMenu {
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+  padding: 12px 23px 28px 23px;
+  height: 350px;
+  width: 100px;
+  display: flex;
+}
