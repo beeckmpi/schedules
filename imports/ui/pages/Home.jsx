@@ -59,7 +59,7 @@ export default class Home extends Component {
   render() {
     return (
       <section id="home">
-        <Paper id="table" style={paperTableStyle} zDepth={3}>
+        <Paper id="table" style={paperTableStyle} zDepth={1}>
             <h3>My Templates</h3>
             {this.renderTemplates()}
         </Paper>

@@ -10,11 +10,14 @@ import { Templates } from '../../api/templates.js';
 
 import App from '../App.jsx';
 
-export default AppContainer = createContainer(props => {
+export default AppContainer = createContainer(({ params }) => {
+  const currentUser = Meteor.user();
+  const templates = Templates.find({}).fetch()
   return {
-    templates: Templates.find({}).fetch(),
+    templates,
     columns: Columns.find({}).fetch(),
     columnCounter: Columns.find({}).count(),
     dragCategories: DragCategories.find({}).fetch(),
+    currentUser,
   };
 }, App);

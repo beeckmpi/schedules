@@ -121,6 +121,13 @@ form.th {
   opacity: 1;
   transition: opacity 500ms ease-in;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
 .sidebar-editor {
   position: fixed;
   bottom: 0px;
@@ -142,4 +149,10 @@ Paper {
   height: 350px;
   width: 100px;
   display: flex;
+}
+
+a {
+  font-style: normal;
+  text-decoration: none;
+  color: inherit;
 }
