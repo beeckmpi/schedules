@@ -28,15 +28,6 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 
-const paperTableStyle = {
-  minWidth: '50%',
-  maxWidth: '70%',
-  marginBottom: '20px',
-  marginLeft: '310px',
-  minHeight: '600px',
-  padding: '40px 40px',
-  marginTop: '15px'
-}
 const floatingButtonStyle = {
   alignSelf: 'flex-end'
 }
@@ -59,10 +50,8 @@ export default class Home extends Component {
   render() {
     return (
       <section id="home">
-        <Paper id="table" style={paperTableStyle} zDepth={1}>
-            <h3>My Templates</h3>
-            {this.renderTemplates()}
-        </Paper>
+        <h3 style={{marginLeft: '300px'}}>My Templates</h3>
+        {this.renderTemplates()}
         <div className="bottomRightMenu">
           <FloatingActionButton style={floatingButtonStyle}>
             <ContentAdd />

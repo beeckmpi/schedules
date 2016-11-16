@@ -1,7 +1,15 @@
 import React, { Component, PropTypes } from 'react';
+import Paper from 'material-ui/Paper';
 
 import { Templates } from '../api/templates.js';
-
+const paperTableStyle = {
+  minWidth: '50%',
+  maxWidth: '70%',
+  marginBottom: '20px',
+  marginLeft: '300px',
+  padding: '8px 8px',
+  marginTop: '15px'
+}
 // template component - represents a single todo item
 export default class template extends Component {
   toggleChecked() {
@@ -20,20 +28,9 @@ export default class template extends Component {
     // so that we can style them nicely in CSS
     const templateClassName = this.props.template.checked ? 'checked' : '';
     return (
-      <li className={templateClassName}>
-        <button className="delete" onClick={this.deleteThistemplate.bind(this)}>
-          &times;
-        </button>
-
-        <input
-          type="checkbox"
-          readOnly
-          checked={this.props.template.checked}
-          onClick={this.toggleChecked.bind(this)}
-        />
-
+      <Paper id="table" style={paperTableStyle} zDepth={1}>
         <span className="text">{this.props.template.text}</span>
-      </li>
+      </Paper>
     );
   }
 }
