@@ -149,6 +149,7 @@ Paper {
   height: 350px;
   width: 100px;
   display: flex;
+  flex-direction: column-reverse;
 }
 
 a {

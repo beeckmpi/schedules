@@ -1,5 +1,7 @@
 // react imports
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router';
+import { Meteor } from 'meteor/meteor';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import {grey50, grey400, grey800} from 'material-ui/styles/colors';
@@ -33,8 +35,14 @@ export default class AuthPageSignIn extends Component {
     const id = event.target.id;
     this.setState({[id]: event.target.value});
   }
-  addUser() {
-
+  signInUser() {
+    var userObject = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    Meteor.loginWithPassword(userObject.email, userObject.password, function(err){
+        browserHistory.push('/');
+    });
   }
   render() {
     return (
@@ -47,7 +55,7 @@ export default class AuthPageSignIn extends Component {
             <TextField floatingLabelText="Password" hintText="Password" type="email" type="Password" id="password" style={{width: '100%'}} value={this.state.password} onChange={this.handleChange.bind(this)} />
           </div>
           <div className="formInput">
-            <RaisedButton primary={true} label="Sign in" onClick={this.addUser.bind(this)} />
+            <RaisedButton primary={true} label="Sign in" onClick={this.signInUser.bind(this)} />
           </div>
         </div>
         <div style={{width:'20%', display:'inline-block'}}>

@@ -22,16 +22,21 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import DeveloperBoard from 'material-ui/svg-icons/hardware/developer-board';
+import List from 'material-ui/svg-icons/action/list';
 import SelectField from 'material-ui/SelectField';
 import Slider from 'material-ui/Slider';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 
-const floatingButtonStyle = {
-  alignSelf: 'flex-end'
+const floatingButtonStyleStart = {
+  alignSelf: 'flex-end',
 }
-
+const floatingButtonStyle = {
+  alignSelf: 'flex-end',
+  margin: '4px 8px'
+}
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -53,8 +58,14 @@ export default class Home extends Component {
         <h3 style={{marginLeft: '300px'}}>My Templates</h3>
         {this.renderTemplates()}
         <div className="bottomRightMenu">
-          <FloatingActionButton style={floatingButtonStyle}>
+          <FloatingActionButton style={floatingButtonStyleStart}>
             <ContentAdd />
+          </FloatingActionButton>
+          <FloatingActionButton mini={true} style={floatingButtonStyle} secondary={true} >
+            <List />
+          </FloatingActionButton>
+          <FloatingActionButton mini={true} style={floatingButtonStyle} secondary={true} >
+            <DeveloperBoard />
           </FloatingActionButton>
         </div>
       </section>

@@ -2,10 +2,23 @@ import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { DragCategories } from '../api/dragCategories.js';
 import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 // template component - represents a single todo item
 const styles = {
   customWidth: {
     width: 200,
+  },
+};
+const chbxStyles = {
+  block: {
+    maxWidth: 250,
+  },
+  checkbox: {
+    marginBottom: 16,
   },
 };
 export default class dragCategory extends Component {
@@ -46,6 +59,12 @@ export default class dragCategory extends Component {
               <option value="select">Select</option>
             </select>
           </div>
+          <Checkbox
+            checkedIcon={<Visibility />}
+            uncheckedIcon={<VisibilityOff />}
+            label="Visible in List"
+            style={chbxStyles.checkbox}
+          />
           <div className="formInput inline">
             <RaisedButton primary={true} label="Add To Category" />
           </div>
