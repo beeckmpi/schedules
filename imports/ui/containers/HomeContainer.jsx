@@ -8,7 +8,9 @@ import { Templates } from '../../api/templates.js';
 import Home from '../pages/Home.jsx';
 
 export default HomeContainer = createContainer(props => {
+  const currentUser = Meteor.user();
   return {
-    templates: Templates.find({}).fetch()
+    templates: Templates.find({}).fetch(),
+    currentUser,
   };
 }, Home);

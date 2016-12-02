@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
+import { browserHistory } from 'react-router';
 
 import { Templates } from '../api/templates.js';
 const paperTableStyle = {
@@ -18,6 +19,9 @@ export default class template extends Component {
       $set: { checked: !this.props.template.checked },
     });
   }
+  loadUrl(){
+    browserHistory.push('/template/'+this.props.template._id);
+  }
 
   deleteThistemplate() {
     templates.remove(this.props.template._id);
@@ -28,8 +32,8 @@ export default class template extends Component {
     // so that we can style them nicely in CSS
     const templateClassName = this.props.template.checked ? 'checked' : '';
     return (
-      <Paper id="table" style={paperTableStyle} zDepth={1}>
-        <span className="text">{this.props.template.text}</span>
+      <Paper id="table" style={paperTableStyle} zDepth={1} onClick={this.loadUrl.bind(this)}>
+        <span className="text">{this.props.template.templateTitle}</span>
       </Paper>
     );
   }

@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { ReactDOM, render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
+import { Columns } from '../../api/columns.js';
 // imports -> ui imports
 import Column from '../Column.jsx';
 import ColumnHeader from '../ColumnHeader.jsx';
@@ -49,10 +50,10 @@ export default class TemplatePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      templateTitle: '',
-      templateTableHeader: '',
-      templateType: 'Nr.',
-      rows: 5,
+      templateTitle: this.props.template.templateTitle,
+      templateTableHeader: this.props.template.templateTableHeader,
+      templateType: this.props.template.templateType,
+      templateRows: this.props.template.templateRows,
       open: false
     };
 
@@ -90,6 +91,7 @@ export default class TemplatePage extends Component {
       columnTitle: '',
       columnType: 'draggable',
       columnType: '',
+      templateId: this.props.templateId,
       saved: false
     });
   }
@@ -103,7 +105,7 @@ export default class TemplatePage extends Component {
   renderRows() {
     var text = [];
     var rows = [];
-    var rowNr = this.state.rows;
+    var rowNr = this.state.templateRows;
     rowNr = parseFloat(rowNr);
     var columns = this.props.columns;
     columns.forEach(function(item, index){
@@ -147,7 +149,7 @@ export default class TemplatePage extends Component {
                       <TextField floatingLabelText="Template title" style={{width: '100%'}} id={'templateTitle'} value={this.state.templateTitle} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div>
-                      <TextField floatingLabelText="Table Header Title" style={{width: '100%'}} id='templateTableHeader' value={this.state.value} onChange={this.handleChange.bind(this)} />
+                      <TextField floatingLabelText="Table Header Title" style={{width: '100%'}} id='templateTableHeader' value={this.state.templateTableHeader} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div>
                       <SelectField floatingLabelText="Template Type" style={{width: '100%'}} value={this.state.templateType} id="templateType" onChange={this.handleChangeSelect.bind(this)} >
@@ -162,7 +164,7 @@ export default class TemplatePage extends Component {
                     <div>
                       <label>Show rows:</label>
                       <select
-                         name="rows" id="rows" onChange={this.handleChange.bind(this)}
+                         name="rows" id="templateRows" onChange={this.handleChange.bind(this)}
                         >
                         <option value="5">5</option>
                         <option value="10">10</option>
@@ -215,8 +217,9 @@ export default class TemplatePage extends Component {
   }
 }
 TemplatePage.propTypes = {
-  templates: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   dragCategories:  PropTypes.array.isRequired,
   columnCounter: PropTypes.number.isRequired,
+  templateId: PropTypes.string.isRequired,
+  template: React.PropTypes.object,
 };

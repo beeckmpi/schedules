@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { ReactDOM, render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
+import { browserHistory } from 'react-router';
 
 // imports -> ui imports
 import Column from '../Column.jsx';
@@ -9,6 +10,7 @@ import ColumnHeader from '../ColumnHeader.jsx';
 import DragCategory from '../DragCategory.jsx';
 import Template from '../Template.jsx';
 
+import { Templates } from '../../api/templates.js';
 // material-ui imports
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -32,10 +34,11 @@ import TextField from 'material-ui/TextField';
 
 const floatingButtonStyleStart = {
   alignSelf: 'flex-end',
+  margin: '6px 0px 0px 0px'
 }
 const floatingButtonStyle = {
   alignSelf: 'flex-end',
-  margin: '4px 8px'
+  margin: '6px 8px'
 }
 export default class Home extends Component {
   constructor(props) {
@@ -43,7 +46,6 @@ export default class Home extends Component {
     this.state = {
 
     };
-
   }
 
   renderTemplates() {
@@ -51,8 +53,23 @@ export default class Home extends Component {
       <Template key={template._id} template={template} />
     ));
   }
+  createTemplate(event){
+    event.preventDefault();
+    Templates.insert({
+      createdAt: new Date(), // current time
+      createdBy: this.props.currentUser._id,
+      templateTitle: '',
+      templateTableHeader: '',
+      templateType: '',
+      templateRows: 5,
+      saved: false
+    }, function(err, template) {
+      browserHistory.push('/template/'+template._id);
+    });
+  }
 
   render() {
+    let currentUser = this.props.currentUser;
     return (
       <section id="home">
         <h3 style={{marginLeft: '300px'}}>My Templates</h3>
@@ -64,7 +81,7 @@ export default class Home extends Component {
           <FloatingActionButton mini={true} style={floatingButtonStyle} secondary={true} >
             <List />
           </FloatingActionButton>
-          <FloatingActionButton mini={true} style={floatingButtonStyle} secondary={true} >
+          <FloatingActionButton mini={true} style={floatingButtonStyle} secondary={true} onClick={this.createTemplate.bind(this)} >
             <DeveloperBoard />
           </FloatingActionButton>
         </div>

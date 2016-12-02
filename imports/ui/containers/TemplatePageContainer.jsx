@@ -9,11 +9,13 @@ import { Templates } from '../../api/templates.js';
 
 import TemplatePage from '../pages/TemplatePage.jsx';
 
-export default TemplatePageContainer = createContainer(props => {
+export default TemplatePageContainer = createContainer(({props, params}) => {
+  const {templateId} = params;
   return {
-    templates: Templates.find({}).fetch(),
-    columns: Columns.find({}).fetch(),
-    columnCounter: Columns.find({}).count(),
-    dragCategories: DragCategories.find({}).fetch(),
+    template: Templates.findOne(templateId),
+    columns: Columns.find({templateId: templateId}).fetch(),
+    columnCounter: Columns.find({templateId: templateId}).count(),
+    dragCategories: DragCategories.find({templateId: templateId}).fetch(),
+    templateId: params.templateId
   };
 }, TemplatePage);

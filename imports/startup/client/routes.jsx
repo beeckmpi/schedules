@@ -13,7 +13,7 @@ export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path="/" component={AppContainer}>
       <IndexRoute component={HomeContainer} />
-      <Route path="template" component={TemplatePageContainer} />
+      <Route path="template/:templateId" component={TemplatePageContainer} />
       <Route path="signin" component={AuthPageSignIn} />
       <Route path="join" component={AuthPageJoin} />
       <Route path="*" component={NotFoundPage} />
