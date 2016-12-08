@@ -62,7 +62,7 @@ export default class App extends Component {
           <AppBar
             title={this.state.title}
             iconElementLeft={<IconButton onTouchTap={this.handleClick.bind(this)}><MenuIcon  color={grey50} /></IconButton>}
-            iconElementRight={<FlatButton label={ loggedIn ? 'Welcome '+currentUser.profile.firstname+' '+currentUser.profile.name : '' } />}
+            iconElementRight={<FlatButton label={ loggedIn ? 'Welcome '+currentUser.profile.firstname+' '+currentUser.profile.name : 'Sign In' } />}
             style={{position: 'fixed'}}
             id="Default AppBar"
           />

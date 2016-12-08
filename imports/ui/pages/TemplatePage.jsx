@@ -4,6 +4,7 @@ import { ReactDOM, render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import { Columns } from '../../api/columns.js';
+import { DragCategories } from '../../api/dragCategories.js';
 // imports -> ui imports
 import Column from '../Column.jsx';
 import ColumnHeader from '../ColumnHeader.jsx';
@@ -79,7 +80,7 @@ export default class TemplatePage extends Component {
   }
   handleChangeSelect(event, index, value) {
     console.log(event);
-    this.setState({[event.target.id]: value});
+    this.setState({[event.target.id]: event.target.value});
   }
   handleClick () {
     this.setState({open: !this.state.open});
@@ -100,6 +101,8 @@ export default class TemplatePage extends Component {
     DragCategories.insert({
       createdAt: new Date(), // current time
       dragCategoryTitle: '',
+      templateId: this.props.templateId,
+      saved: false
     });
   }
   renderRows() {
