@@ -4,7 +4,8 @@ import { ReactDOM, render } from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router';
-
+import { Provider } from 'redux';
+import Store from '../../imports/store/store';
 // material-ui imports
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -52,25 +53,25 @@ export default class App extends Component {
     let userDataAvailable = (currentUser !== undefined);
     let loggedIn = (currentUser && userDataAvailable);
     return (
-      <MuiThemeProvider>
-        <div className="container">
-          <Drawer docked={this.state.docked} zDepth={0} width={300} open={this.state.docked} containerStyle={{top: '65px', backgroundColor: '#E0E0E0'}} color={grey300} onRequestChange={(open) => this.setState({open})} >
-            <MenuItem  leftIcon={<HomeIcon />}><Link to="/" title="Schedules" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Home</Link></MenuItem>
-            <MenuItem><Link to="/template" title="New Template" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Template</Link></MenuItem>
-            <MenuItem onTouchTap={this.handleClose.bind(this)}>Menu Item 2</MenuItem>
-          </Drawer>
-          <AppBar
-            title={this.state.title}
-            iconElementLeft={<IconButton onTouchTap={this.handleClick.bind(this)}><MenuIcon  color={grey50} /></IconButton>}
-            iconElementRight={<FlatButton label={ loggedIn ? 'Welcome '+currentUser.profile.firstname+' '+currentUser.profile.name : 'Sign In' } />}
-            style={{position: 'fixed'}}
-            id="Default AppBar"
-          />
-          <section id="content" style={{paddingTop: '60px'}}>
-            {this.props.children}
-          </section>
-        </div>
-      </MuiThemeProvider>
+        <MuiThemeProvider>
+            <div className="container">
+              <Drawer docked={this.state.docked} zDepth={0} width={300} open={this.state.docked} containerStyle={{top: '65px', backgroundColor: '#E0E0E0'}} color={grey300} onRequestChange={(open) => this.setState({open})} >
+                <MenuItem  leftIcon={<HomeIcon />}><Link to="/" title="Schedules" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Home</Link></MenuItem>
+                <MenuItem><Link to="/template" title="New Template" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Template</Link></MenuItem>
+                <MenuItem onTouchTap={this.handleClose.bind(this)}>Menu Item 2</MenuItem>
+              </Drawer>
+              <AppBar
+                title={this.state.title}
+                iconElementLeft={<IconButton onTouchTap={this.handleClick.bind(this)}><MenuIcon  color={grey50} /></IconButton>}
+                iconElementRight={<FlatButton label={ loggedIn ? 'Welcome '+currentUser.profile.firstname+' '+currentUser.profile.name : 'Sign In' } />}
+                style={{position: 'fixed'}}
+                id="Default AppBar"
+              />
+              <section id="content" style={{paddingTop: '60px'}}>
+                {this.props.children}
+              </section>
+            </div>
+        </MuiThemeProvider>
     );
   }
 }

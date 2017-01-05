@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
 import { browserHistory } from 'react-router';
 
-import { Templates } from '../api/templates.js';
+import { Templates } from '../api/templates';
 const paperTableStyle = {
   minWidth: '50%',
   maxWidth: '70%',

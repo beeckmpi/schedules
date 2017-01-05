@@ -4,12 +4,16 @@ import { ReactDOM, render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import { Columns } from '../../api/columns.js';
+import { Templates } from '../../api/templates.js';
 import { DragCategories } from '../../api/dragCategories.js';
 // imports -> ui imports
 import Column from '../Column.jsx';
 import ColumnHeader from '../ColumnHeader.jsx';
 import DragCategory from '../DragCategory.jsx';
 import Template from '../Template.jsx';
+
+import updateTemplate from '../../actions/updateTemplate';
+import updateColumn from '../../actions/addColumn';
 
 // material-ui imports
 import AppBar from 'material-ui/AppBar';
@@ -55,9 +59,11 @@ export default class TemplatePage extends Component {
       templateTableHeader: this.props.template.templateTableHeader,
       templateType: this.props.template.templateType,
       templateRows: this.props.template.templateRows,
+
       open: false
     };
-
+    this.props.docked= false;
+    this.props.open = false;
   }
 
   handleSubmit(event) {
@@ -76,10 +82,14 @@ export default class TemplatePage extends Component {
   }
   handleChange(event) {
     const id = event.target.id;
+    console.log(event+' '+ event.target.value);
     this.setState({[id]: event.target.value});
+    template = {templateTitle: event.target.value};
+    Meteor.call('updateTemplate', this.props.templateId, template);
   }
   handleChangeSelect(event, index, value) {
     console.log(event);
+
     this.setState({[event.target.id]: event.target.value});
   }
   handleClick () {
@@ -149,7 +159,7 @@ export default class TemplatePage extends Component {
                 <Tab label="Table">
                   <section style={{padding: '4px 15px 15px 15px'}}>
                     <div>
-                      <TextField floatingLabelText="Template title" style={{width: '100%'}} id={'templateTitle'} value={this.state.templateTitle} onChange={this.handleChange.bind(this)} />
+                      <TextField floatingLabelText="Template title" style={{width: '100%', fontSize: 'large'}} id={'templateTitle'} value={this.state.templateTitle} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div>
                       <TextField floatingLabelText="Table Header Title" style={{width: '100%'}} id='templateTableHeader' value={this.state.templateTableHeader} onChange={this.handleChange.bind(this)} />
@@ -202,7 +212,7 @@ export default class TemplatePage extends Component {
             <Table id="templateTable" style={tableStyle}>
               <TableHeader selectable={false}>
                 <TableRow>
-                  <TableRowColumn className="templateTableHeaderTitle" colSpan={this.props.columnCounter+1}>{this.state.templateTableHeader}</TableRowColumn>
+                  <TableRowColumn className="templateTableHeaderTitle"  style={{fontSize: '22px'}} colSpan={this.props.columnCounter+1}>{this.state.templateTableHeader}</TableRowColumn>
                 </TableRow>
                 <TableRow>
                   <TableRowColumn className="templateType">{this.state.templateType}</TableRowColumn>
