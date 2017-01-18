@@ -18,7 +18,16 @@ header {
   font-stretch: expanded;
   text-transform: uppercase;
 }
-
+.columnEditPaper {
+  height: 65px;
+  transition: all 0.15s ease;
+}
+.columnEditPaper.view {
+  height: 55px;
+}
+.columnEditPaper.edit {
+  height: 230px;
+}
 #content {
   width: 95%;
   margin: 0 auto;

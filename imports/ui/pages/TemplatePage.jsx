@@ -59,7 +59,6 @@ export default class TemplatePage extends Component {
       templateTableHeader: this.props.template.templateTableHeader,
       templateType: this.props.template.templateType,
       templateRows: this.props.template.templateRows,
-
       open: false
     };
     this.props.docked= false;
@@ -82,15 +81,19 @@ export default class TemplatePage extends Component {
   }
   handleChange(event) {
     const id = event.target.id;
-    console.log(event+' '+ event.target.value);
     this.setState({[id]: event.target.value});
     template = {templateTitle: event.target.value};
     Meteor.call('updateTemplate', this.props.templateId, template);
   }
-  handleChangeSelect(event, index, value) {
-    console.log(event);
-
-    this.setState({[event.target.id]: event.target.value});
+  handleChangeSelectTemplateType(event, index, value) {
+    this.setState({templateType: value});
+    template = {templateType: event.target.value};
+    Meteor.call('updateTemplate', this.props.templateId, template);
+  }
+  handleChangeSelectTemplateRows(event, index, value) {
+    this.setState({templateRows: value});
+    template = {templateRows: event.target.value};
+    Meteor.call('updateTemplate', this.props.templateId, template);
   }
   handleClick () {
     this.setState({open: !this.state.open});
@@ -165,7 +168,7 @@ export default class TemplatePage extends Component {
                       <TextField floatingLabelText="Table Header Title" style={{width: '100%'}} id='templateTableHeader' value={this.state.templateTableHeader} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div>
-                      <SelectField floatingLabelText="Template Type" style={{width: '100%'}} value={this.state.templateType} id="templateType" onChange={this.handleChangeSelect.bind(this)} >
+                      <SelectField floatingLabelText="Template Type" style={{width: '100%'}} value={this.state.templateType} id="templateType" onChange={this.handleChangeSelectTemplateType.bind(this)} >
                         <MenuItem value={"Nr."} primaryText="Numeric" />
                         <MenuItem value={"Hour"} primaryText="Hourly" />
                         <MenuItem value={"Day"} primaryText="Daily" />
@@ -175,17 +178,18 @@ export default class TemplatePage extends Component {
                        </SelectField>
                     </div>
                     <div>
-                      <label>Show rows:</label>
-                      <select
-                         name="rows" id="templateRows" onChange={this.handleChange.bind(this)}
-                        >
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="40">40</option>
-                      </select>
+                        <SelectField floatingLabelText="Show Rows" style={{width: '100%'}} id="templateRows" value={this.state.templateRows} onChange={this.handleChangeSelectTemplateRows.bind(this)} >
+                          <MenuItem value={5} primaryText="5" />
+                          <MenuItem value={10} primaryText="10" />
+                          <MenuItem value={15} primaryText="15" />
+                          <MenuItem value={20} primaryText="20" />
+                          <MenuItem value={40} primaryText="40" />
+                         </SelectField>
                     </div>
+                  </section>
+                </Tab>
+                <Tab label="Columns" >
+                  <section style={{padding: '4px 15px 15px 15px'}}>
                     <div>
                       <RaisedButton onClick={this.addColumn.bind(this)} primary={true} label="Add Column" style={style} />
                     </div>

@@ -9,7 +9,7 @@ import HomeContainer from '../../ui/containers/HomeContainer';
 import AuthPageSignIn from '../../ui/pages/AuthPageSignIn';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin';
 import NotFoundPage from '../../ui/pages/NotFoundPage';
-import TemplatePage from '../../ui/containers/TemplatePageContainer';
+import TemplatePageContainer from '../../ui/containers/TemplatePageContainer';
 
 export const renderRoutes = () => (
   <Provider store={Store}>

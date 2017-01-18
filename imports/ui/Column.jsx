@@ -18,7 +18,10 @@ const styles = {
 const style = {
   padding: '15px 15px',
   display: 'inline-block',
-  width: '100%'
+  width: '100%',
+  maxHeight: '250px',
+  overflow: 'hidden',
+  position: 'relative'
 };
 const deleteStyle = {
   position: 'absolute',
@@ -32,6 +35,9 @@ const deleteStyleView = {
   top: '-10px',
   cursor: 'pointer'
 }
+const show = {visibility: "visible", height: "auto", position: "relative", top: '0px', transition: 'all .15s ease .16s'}
+const hide = {visibility: "hidden",  position: "absolute", top: '-250px', width:'330px', transition: 'all .15s ease'}
+
 const editStyleView = {
   position: 'absolute',
   right: '25px',
@@ -58,18 +64,21 @@ export default class Column extends Component {
     this.edit = [this.props.column._id]+'_edit';
     this.view = [this.props.column._id]+'_view';
     if (this.props.column.saved){
-      this.viewVar = 'inherit';
-      this.editVar = 'none';
+      this.viewVar = show;
+      this.editVar = hide;
+      this.columnInfo = "columnEditPaper view";
     } else {
-      this.viewVar = 'none';
-      this.editVar = 'inherit';
+      this.viewVar = show;
+      this.editVar = hide;
+      this.columnInfo = "columnEditPaper edit";
     }
     this.state = {
       [this.props.column._id]: '',
       [this.textValue]: this.props.column.columnTitle,
       [this.selectValue]: this.props.column.columnType,
       [this.edit]: this.editVar,
-      [this.view]: this.viewVar
+      [this.view]: this.viewVar,
+      columnInfo: this.columnInfo
     }
   }
   handleChange(event) {
@@ -85,22 +94,22 @@ export default class Column extends Component {
     });
   }
   saveColumn(event){
-    this.setState({[this.edit]: 'none', [this.view]: 'inherit'});
+    this.setState({[this.edit]: hide, columnInfo: "columnEditPaper view", [this.view]: show});
     Columns.update(this.props.column._id,{
       $set: {saved: true}
     });
   }
   editThisColumn(event) {
     event.preventDefault();
-    this.setState({[this.edit]: 'inherit', [this.view]: 'none'});
+    this.setState({[this.edit]: show, columnInfo: "columnEditPaper edit", [this.view]: hide});
     Columns.update(this.props.column._id,{
       $set: {saved: false}
     });
   }
   render() {
     return (
-      <Paper zDepth={2} style={style}>
-        <section className="edit" style={{display: this.state[this.edit], width: '100%'}}>
+      <Paper zDepth={2} style={style} className={this.state.columnInfo}>
+        <section className="edit" style={this.state[this.edit]}>
           <div className="ColumnEdit">
             <IconButton tooltip="Delete Column" style={deleteStyle} onClick={this.deleteThisColumn.bind(this)}>
               <Delete color={grey400} hoverColor={grey800} />
@@ -128,7 +137,7 @@ export default class Column extends Component {
               <RaisedButton primary={true} label="Save Column" onClick={this.saveColumn.bind(this)} />
             </div>
           </section>
-          <section className="view" style={{display: this.state[this.view], position: 'relative', width: '100%'}}>
+          <section className="view" style={this.state[this.view]}>
             <IconButton tooltip="Delete Column" style={deleteStyleView} onClick={this.deleteThisColumn.bind(this)}>
               <Delete color={grey400} hoverColor={grey800} />
             </IconButton>
