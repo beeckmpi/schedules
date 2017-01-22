@@ -41,7 +41,7 @@ export default class App extends Component {
   changeTitle (e) {
     if (e.target.title == 'Schedules') {
       var docked = true;
-      var open = true;
+      var open = false;
     } else {
       var docked = false;
       var open = false;

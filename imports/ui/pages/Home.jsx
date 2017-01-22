@@ -5,10 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { browserHistory } from 'react-router';
 
 // imports -> ui imports
-import Column from '../Column.jsx';
-import ColumnHeader from '../ColumnHeader.jsx';
-import DragCategory from '../DragCategory.jsx';
-import Template from '../Template.jsx';
+import Template from '../components/Template.jsx';
 
 import { Templates } from '../../api/templates.js';
 // material-ui imports

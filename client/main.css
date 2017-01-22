@@ -20,6 +20,7 @@ header {
 }
 .columnEditPaper {
   height: 65px;
+  width: 330px;
   transition: all 0.15s ease;
 }
 .columnEditPaper.view {
@@ -27,6 +28,19 @@ header {
 }
 .columnEditPaper.edit {
   height: 230px;
+}
+.columnEditPaper.edit .view {
+  top: 6px;
+}
+.templateTableHeader {
+  left: -250%;
+  position: absolute;
+  transition: all .3s ease .3s;
+}
+.templateTableHeader.ready {
+  left: 0;
+  position: absolute;
+  transition: all .3s ease .3s;
 }
 #content {
   width: 95%;
@@ -114,21 +128,6 @@ form.th {
 .dragCategory {
   position: relative;
   border: 2px solid #AAA;
-}
-.column {
-  opacity: 1;
-}
-.column.new {
-  opacity: 0;
-}
-.column.addFadeOut {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
-}
-
-.column.addFadeIn {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
 }
 
 input:-webkit-autofill,

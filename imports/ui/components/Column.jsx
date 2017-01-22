@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Columns } from '../api/columns.js';
+import { Columns } from '../../api/columns.js';
 import Paper from 'material-ui/Paper';
 import Delete from 'material-ui/svg-icons/action/delete';
 import Create from 'material-ui/svg-icons/content/create';
@@ -18,7 +18,7 @@ const styles = {
 const style = {
   padding: '15px 15px',
   display: 'inline-block',
-  width: '100%',
+  width: '350px',
   maxHeight: '250px',
   overflow: 'hidden',
   position: 'relative'
@@ -35,8 +35,9 @@ const deleteStyleView = {
   top: '-10px',
   cursor: 'pointer'
 }
-const show = {visibility: "visible", height: "auto", position: "relative", top: '0px', transition: 'all .15s ease .16s'}
-const hide = {visibility: "hidden",  position: "absolute", top: '-250px', width:'330px', transition: 'all .15s ease'}
+const show = {height: "auto", position: "absolute", top: '9px', width: "330px", transition: 'all .15s ease .50s'}
+const hideView = {position: "absolute", top: '250px', width:'350px', transition: 'all .25s ease .25s'}
+const hideEdit = {position: "absolute", top: '-250px', width:'350px', transition: 'all .15s ease'}
 
 const editStyleView = {
   position: 'absolute',
@@ -65,11 +66,11 @@ export default class Column extends Component {
     this.view = [this.props.column._id]+'_view';
     if (this.props.column.saved){
       this.viewVar = show;
-      this.editVar = hide;
+      this.editVar = hideEdit;
       this.columnInfo = "columnEditPaper view";
     } else {
       this.viewVar = show;
-      this.editVar = hide;
+      this.editVar = hideView;
       this.columnInfo = "columnEditPaper edit";
     }
     this.state = {
@@ -94,14 +95,14 @@ export default class Column extends Component {
     });
   }
   saveColumn(event){
-    this.setState({[this.edit]: hide, columnInfo: "columnEditPaper view", [this.view]: show});
+    this.setState({[this.edit]: hideEdit, columnInfo: "columnEditPaper view", [this.view]: show});
     Columns.update(this.props.column._id,{
       $set: {saved: true}
     });
   }
   editThisColumn(event) {
     event.preventDefault();
-    this.setState({[this.edit]: show, columnInfo: "columnEditPaper edit", [this.view]: hide});
+    this.setState({[this.edit]: show, columnInfo: "columnEditPaper edit", [this.view]: hideView});
     Columns.update(this.props.column._id,{
       $set: {saved: false}
     });

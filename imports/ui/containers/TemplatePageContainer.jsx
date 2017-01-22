@@ -13,13 +13,14 @@ import TemplatePage from '../pages/TemplatePage.jsx';
 
 const TemplatePageContainer = createContainer(({props, params}) => {
   const {templateId} = params;
-  Meteor.subscribe('getColumns', 'getTemplates');
+  const subscription = Meteor.subscribe('getColumns', 'getTemplates');
   return {
-    template: Templates.findOne({_id: templateId}),
+    templates: Templates.find({_id: templateId}).fetch(),
     columns: Columns.find({templateId: templateId}).fetch(),
     columnCounter: Columns.find({templateId: templateId}).count(),
     dragCategories: DragCategories.find({templateId: templateId}).fetch(),
-    templateId: params.templateId
+    templateId: params.templateId,
+    subscriptionReady: !subscription.ready()
   };
 }, TemplatePage);
 

@@ -1,5 +1,6 @@
 // react imports
 import React, { Component, PropTypes } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { ReactDOM, render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -7,10 +8,12 @@ import { Columns } from '../../api/columns.js';
 import { Templates } from '../../api/templates.js';
 import { DragCategories } from '../../api/dragCategories.js';
 // imports -> ui imports
-import Column from '../Column.jsx';
-import ColumnHeader from '../ColumnHeader.jsx';
-import DragCategory from '../DragCategory.jsx';
-import Template from '../Template.jsx';
+import Column from '../components/Column.jsx';
+import ColumnHeader from '../components/ColumnHeader.jsx';
+import DragCategory from '../components/DragCategory.jsx';
+import Loading from '../components/loading.jsx';
+import TemplateForm from '../components/TemplateForm.jsx'
+import TemplateTable from '../components/templateTable.jsx';
 
 import updateTemplate from '../../actions/updateTemplate';
 import updateColumn from '../../actions/addColumn';
@@ -54,47 +57,14 @@ const tableStyle = {
 export default class TemplatePage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      templateTitle: this.props.template.templateTitle,
-      templateTableHeader: this.props.template.templateTableHeader,
-      templateType: this.props.template.templateType,
-      templateRows: this.props.template.templateRows,
-      open: false
-    };
+
     this.props.docked= false;
     this.props.open = false;
+    this.state = {
+      open: false
+    };
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    // Find the text field via the React ref
-    const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
-
-    Templates.insert({
-      text,
-      createdAt: new Date(), // current time
-    });
-
-    // Clear form
-    ReactDOM.findDOMNode(this.refs.textInput).value = '';
-  }
-  handleChange(event) {
-    const id = event.target.id;
-    this.setState({[id]: event.target.value});
-    template = {templateTitle: event.target.value};
-    Meteor.call('updateTemplate', this.props.templateId, template);
-  }
-  handleChangeSelectTemplateType(event, index, value) {
-    this.setState({templateType: value});
-    template = {templateType: event.target.value};
-    Meteor.call('updateTemplate', this.props.templateId, template);
-  }
-  handleChangeSelectTemplateRows(event, index, value) {
-    this.setState({templateRows: value});
-    template = {templateRows: event.target.value};
-    Meteor.call('updateTemplate', this.props.templateId, template);
-  }
   handleClick () {
     this.setState({open: !this.state.open});
   }
@@ -118,41 +88,27 @@ export default class TemplatePage extends Component {
       saved: false
     });
   }
-  renderRows() {
-    var text = [];
-    var rows = [];
-    var rowNr = this.state.templateRows;
-    rowNr = parseFloat(rowNr);
-    var columns = this.props.columns;
-    columns.forEach(function(item, index){
-      text.push(<TableRowColumn key={index} />);
-    });
-    for (var x = 0; x < rowNr; x++) {
-      rows.push(<TableRow key={x}>{text}</TableRow>);
-    };
-    return rows;
-  }
-  renderColumnHeaders() {
-    return this.props.columns.map((column) => (
-      <ColumnHeader key={column._id} columnHeader={column} />
-    ));
-  }
-  renderColumns() {
-    return this.props.columns.map((column) => (
-      <Column key={column._id} column={column} />
-    ));
-  }
   renderDragCategories() {
     return this.props.dragCategories.map((dragCategory) => (
       <DragCategory key={dragCategory._id} column={dragCategory} />
     ));
   }
-  renderTemplates() {
-    return this.props.templates.map((template) => (
-      <Template key={template._id} template={template} />
+
+  renderColumns() {
+    return this.props.columns.map((column) => (
+      <Column key={column._id} column={column} />
     ));
   }
-
+  renderTemplateForm() {
+    return this.props.templates.map((template) => (
+      <TemplateForm key={template._id} template={template} />
+    ));
+  }
+  renderTemplateTable () {
+    return this.props.templates.map((template) => (
+      <TemplateTable key={this.props.templateId} template={template} columns={this.props.columns} />
+    ));
+  }
   render() {
     return (
       <div className="container">
@@ -160,33 +116,7 @@ export default class TemplatePage extends Component {
           <Paper zDepth={3} style={style2} >
               <Tabs >
                 <Tab label="Table">
-                  <section style={{padding: '4px 15px 15px 15px'}}>
-                    <div>
-                      <TextField floatingLabelText="Template title" style={{width: '100%', fontSize: 'large'}} id={'templateTitle'} value={this.state.templateTitle} onChange={this.handleChange.bind(this)} />
-                    </div>
-                    <div>
-                      <TextField floatingLabelText="Table Header Title" style={{width: '100%'}} id='templateTableHeader' value={this.state.templateTableHeader} onChange={this.handleChange.bind(this)} />
-                    </div>
-                    <div>
-                      <SelectField floatingLabelText="Template Type" style={{width: '100%'}} value={this.state.templateType} id="templateType" onChange={this.handleChangeSelectTemplateType.bind(this)} >
-                        <MenuItem value={"Nr."} primaryText="Numeric" />
-                        <MenuItem value={"Hour"} primaryText="Hourly" />
-                        <MenuItem value={"Day"} primaryText="Daily" />
-                        <MenuItem value={"Weeknr"} primaryText="Weekly" />
-                        <MenuItem value={"Month"} primaryText="monthly" />
-                        <MenuItem value={"Custom"} primaryText="Custom (select amount of rows)" />
-                       </SelectField>
-                    </div>
-                    <div>
-                        <SelectField floatingLabelText="Show Rows" style={{width: '100%'}} id="templateRows" value={this.state.templateRows} onChange={this.handleChangeSelectTemplateRows.bind(this)} >
-                          <MenuItem value={5} primaryText="5" />
-                          <MenuItem value={10} primaryText="10" />
-                          <MenuItem value={15} primaryText="15" />
-                          <MenuItem value={20} primaryText="20" />
-                          <MenuItem value={40} primaryText="40" />
-                         </SelectField>
-                    </div>
-                  </section>
+                  {this.renderTemplateForm()}
                 </Tab>
                 <Tab label="Columns" >
                   <section style={{padding: '4px 15px 15px 15px'}}>
@@ -208,27 +138,9 @@ export default class TemplatePage extends Component {
               </Tabs>
             </Paper>
         </div>
-        <section id="content">
-            <h2>
-             {this.state.templateTitle}
-           </h2>
-           <Paper id="table" style={paperTableStyle} zDepth={3}>
-            <Table id="templateTable" style={tableStyle}>
-              <TableHeader selectable={false}>
-                <TableRow>
-                  <TableRowColumn className="templateTableHeaderTitle"  style={{fontSize: '22px'}} colSpan={this.props.columnCounter+1}>{this.state.templateTableHeader}</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn className="templateType">{this.state.templateType}</TableRowColumn>
-                  {this.renderColumnHeaders()}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {this.renderRows()}
-              </TableBody>
-            </Table>
-          </Paper>
-        </section>
+        <div className="templateTableHeader">
+          {this.renderTemplateTable()}
+        </div>
       </div>
     );
   }
@@ -238,5 +150,6 @@ TemplatePage.propTypes = {
   dragCategories:  PropTypes.array.isRequired,
   columnCounter: PropTypes.number.isRequired,
   templateId: PropTypes.string.isRequired,
-  template: React.PropTypes.object,
+  templates: PropTypes.array.isRequired,
+  subscriptionReady: React.PropTypes.bool,
 };

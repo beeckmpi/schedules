@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import { Columns } from '../api/columns.js';
+import { Columns } from '../../api/columns.js';
 import TextField from 'material-ui/TextField';
 
 // template component - represents a single todo item
