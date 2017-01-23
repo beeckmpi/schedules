@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ReactDOM, render } from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
+import Store from '../../store/store';
 
 import { Columns } from '../../api/columns.js';
 import { Templates } from '../../api/templates.js';
@@ -61,10 +62,14 @@ export default class TemplatePage extends Component {
     this.props.docked= false;
     this.props.open = false;
     this.state = {
-      open: false
+      open: false,
+      tableClass: "templateTableHeader"
     };
+    Store.dispatch({type: 'HIDE_DOCK'});
   }
-
+  componentWillMount(){
+    setTimeout(this.setState({'tableClass': 'templateTableHeader ready'}), 5000);
+  }
   handleClick () {
     this.setState({open: !this.state.open});
   }
@@ -106,10 +111,11 @@ export default class TemplatePage extends Component {
   }
   renderTemplateTable () {
     return this.props.templates.map((template) => (
-      <TemplateTable key={this.props.templateId} template={template} columns={this.props.columns} />
+      <TemplateTable key={this.props.templateId} template={template} columns={this.props.columns} columnCounter={this.props.columnCounter} />
     ));
   }
   render() {
+
     return (
       <div className="container">
         <div className="sidebar-editor">
@@ -138,7 +144,7 @@ export default class TemplatePage extends Component {
               </Tabs>
             </Paper>
         </div>
-        <div className="templateTableHeader">
+        <div className={this.state.tableClass}>
           {this.renderTemplateTable()}
         </div>
       </div>

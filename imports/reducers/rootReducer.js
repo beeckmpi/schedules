@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import docked from '../../imports/reducers/visibilityFilter';
+import docked from '../../imports/reducers/docked';
 import visibilityFilter from '../../imports/reducers/visibilityFilter';
 import pageSkip from '../../imports/reducers/pageSkip';
 

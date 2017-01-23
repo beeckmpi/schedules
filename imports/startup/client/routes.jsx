@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory, Link } from 'react-router';
 import { Provider } from 'react-redux';
 import Store from '../../store/store';

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
 import { browserHistory } from 'react-router';
+import Store from '../../store/store';
 
 import { Templates } from '../../api/templates';
 const paperTableStyle = {
@@ -21,6 +22,7 @@ export default class template extends Component {
   }
   loadUrl(){
     browserHistory.push('/template/'+this.props.template._id);
+    Store.dispatch({type: 'HIDE_DOCK'});
   }
 
   deleteThistemplate() {
@@ -33,7 +35,7 @@ export default class template extends Component {
     const templateClassName = this.props.template.checked ? 'checked' : '';
     return (
       <Paper id="table" style={paperTableStyle} zDepth={1} onClick={this.loadUrl.bind(this)}>
-        <span className="text">{this.props.template.templateTitle}</span>
+        <span className="text">{this.props.template.templateTitle} ({this.props.template.templateTableHeader})</span>
       </Paper>
     );
   }

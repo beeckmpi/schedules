@@ -31,9 +31,16 @@ export default class App extends Component {
       docked: true,
       title: 'schedules',
     };
+    Store.dispatch({type: 'SHOW_DOCK'});;
   }
   handleClick () {
     this.setState({open: !this.state.open, docked: !this.state.docked});
+    if(this.props.docked){
+      Store.dispatch({type: 'HIDE_DOCK'});
+    } else {
+      Store.dispatch({type: 'SHOW_DOCK'});
+    }
+
   }
   handleClose () {
     this.setState({open: false});
@@ -55,7 +62,7 @@ export default class App extends Component {
     return (
         <MuiThemeProvider>
             <div className="container">
-              <Drawer docked={this.state.docked} zDepth={0} width={300} open={this.state.docked} containerStyle={{top: '65px', backgroundColor: '#E0E0E0'}} color={grey300} onRequestChange={(open) => this.setState({open})} >
+              <Drawer docked={this.props.docked} zDepth={0} width={300} open={this.props.docked} containerStyle={{top: '65px', backgroundColor: '#E0E0E0'}} color={grey300} onRequestChange={(open) => this.setState({open})} >
                 <MenuItem  leftIcon={<HomeIcon />}><Link to="/" title="Schedules" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Home</Link></MenuItem>
                 <MenuItem><Link to="/template" title="New Template" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Template</Link></MenuItem>
                 <MenuItem onTouchTap={this.handleClose.bind(this)}>Menu Item 2</MenuItem>

@@ -15,9 +15,9 @@ export default class columnHeader extends Component {
 
   render() {
     return (
-      <TableRowColumn>
+      <TableHeaderColumn>
         {this.props.columnHeader.columnTitle}
-      </TableRowColumn>
+      </TableHeaderColumn>
     );
   }
 }

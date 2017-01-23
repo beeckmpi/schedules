@@ -1,10 +1,10 @@
-export default function docked(state = 'SHOW', action) {
+export default function docked(state = true, action) {
   switch (action.type) {
     case 'SHOW_DOCK':
-      return 'SHOW';
+      return true;
       break;
     case 'HIDE_DOCK':
-      return 'HIDDEN';
+      return false;
     default:
       return state;
   }

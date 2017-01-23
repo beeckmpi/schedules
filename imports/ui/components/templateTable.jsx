@@ -49,7 +49,18 @@ export default class TemplateTable extends Component {
   }
   constructor(props) {
     super(props);
-
+    this.state = {
+      fixedHeader: true,
+      fixedFooter: false,
+      stripedRows: false,
+      showRowHover: false,
+      selectable: false,
+      multiSelectable: false,
+      enableSelectAll: false,
+      deselectOnClickaway: true,
+      showCheckboxes: false,
+      height: '300px',
+    };
   }
 
   render() {
@@ -59,17 +70,17 @@ export default class TemplateTable extends Component {
            {this.props.template.templateTitle}
          </h2>
          <Paper id="table" style={paperTableStyle} zDepth={3}>
-          <Table id="templateTable" style={tableStyle}>
-            <TableHeader selectable={false}>
+          <Table id="templateTable" style={tableStyle} fixedHeader={this.state.fixedHeader} fixedFooter={this.state.fixedFooter} selectable={this.state.selectable} multiSelectable={this.state.multiSelectable}>
+            <TableHeader displaySelectAll={this.state.showCheckboxes} adjustForCheckbox={this.state.showCheckboxes} enableSelectAll={this.state.enableSelectAll}>
               <TableRow>
-                <TableRowColumn className="templateTableHeaderTitle"  style={{fontSize: '22px'}} colSpan={this.props.columnCounter+1}>{this.props.template.templateTableHeader}</TableRowColumn>
+                <TableHeaderColumn className="templateTableHeaderTitle"  style={{fontSize: '22px'}} colSpan={this.props.columnCounter+1}>{this.props.template.templateTableHeader}</TableHeaderColumn>
               </TableRow>
-              <TableRow>
-                <TableRowColumn className="templateType">{this.props.template.templateType}</TableRowColumn>
+              <TableRow selectable={false}>
+                <TableHeaderColumn className="templateType">{this.props.template.templateType}</TableHeaderColumn>
                 {this.renderColumnHeaders()}
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody displayRowCheckbox={this.state.showCheckboxes} deselectOnClickaway={this.state.deselectOnClickaway} showRowHover={this.state.showRowHover} stripedRows={this.state.stripedRows}>
               {this.renderRows()}
             </TableBody>
           </Table>
