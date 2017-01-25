@@ -16,6 +16,7 @@ const AppContainer = createContainer(({ params }) => {
   const currentUser = Meteor.user();
   const templates = Meteor.subscribe('getTemplates');
   const columns = Meteor.subscribe('getColumns');
+  const dragCategories = Meteor.subscribe('getDragCategories');
   return {
     templates: Templates.find({}).fetch(),
     columns: Columns.find({}).fetch(),

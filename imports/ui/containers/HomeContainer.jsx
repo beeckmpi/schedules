@@ -10,7 +10,7 @@ import Home from '../pages/Home.jsx';
 export default HomeContainer = createContainer(props => {
   const currentUser = Meteor.user();
   return {
-    templates: Templates.find({}).fetch(),
+    templates: Templates.find({}, {sort: {createdAt: -1}}).fetch(),
     currentUser,
   };
 }, Home);

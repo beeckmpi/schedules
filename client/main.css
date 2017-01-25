@@ -36,11 +36,24 @@ header {
   left: -250%;
   position: absolute;
   transition: all .3s ease .3s;
+  animation: mymove .3s;
+}
+@keyframes mymove {
+    0%   {left: -250%}
+    10% {left: -225%}
+    20% { left: -200%}
+    30%  {left: -175%}
+    40%  {left: -150%}
+    50%  {left: -125%}
+    60%  {left: -100%}
+    70%  {left: -75%}
+    80% {left: -50%}
+    90% {left: -25%}
+    100% {left: 0}
 }
 .templateTableHeader.ready {
   left: 0;
   position: absolute;
-  transition: all .3s ease .3s;
 }
 #content {
   width: 95%;
@@ -70,6 +83,8 @@ select#templateType, select#rows {
 }
 .inlineBlock {
   display: inline-block;
+  vertical-align: bottom;
+  min-width: 180px;
 }
 select {
   padding: 6px 0px;
@@ -78,6 +93,10 @@ select {
   border-color: #03A9F4;
   color: #004D40;
   min-width: 250px;
+}
+.dragCategoryItem {
+  padding: 0px 15px 5px 15px;
+  margin: 3px 0px 10px 0px;
 }
 #templateTable {
   min-width: 50%;
@@ -140,11 +159,29 @@ input:-webkit-autofill:active {
   position: fixed;
   bottom: 0px;
   top:65px;
-  right: 0px;
+  right: -500px;
   width: 28%;
   z-index: 500;
   padding: 15px;
   overflow-y: scroll;
+  transition: all .3s ease .3s;
+  animation: sidebar-move .3s;
+}
+@keyframes sidebar-move {
+    0%   {right: -500px}
+    10% {right: -450px}
+    20% { right: -400px}
+    30%  {right: -350px}
+    40%  {right: -300px}
+    50%  {right: -250px}
+    60%  {right: -200px}
+    70%  {right: -150px}
+    80% {right: -100px}
+    90% {right: -50px}
+    100% {right: 0}
+}
+.sidebar-editor.ready {
+  right: 0px;
 }
 Paper {
   padding: 15px;

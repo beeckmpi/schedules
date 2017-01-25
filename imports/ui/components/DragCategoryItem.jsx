@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { DragCategories } from '../../api/dragCategories.js';
 import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
 import Checkbox from 'material-ui/Checkbox';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
@@ -17,21 +18,28 @@ const styles = {
 };
 const chbxStyles = {
   block: {
-    maxWidth: 250,
+    maxWidth: "270px",
   },
   checkbox: {
     marginBottom: 16,
+    minWith: "256px"
   },
 };
-export default class dragCategory extends Component {
+export default class DragCategoryitem extends Component {
   constructor(props) {
     super(props);
     this.optionsState = {value: 'draggable'};
-    this.textValue = [this.props.column._id]+'_value';
+    this.textValue = [this.props.item._id]+'_value';
+    this.selectValue = [this.props.item._id]+'_selectValue';
     this.state = {
-      [this.props.column._id]: '',
-      [this.textValue]: this.props.column.columnTitle,
+      [this.props.item._id]: '',
+      [this.textValue]: "",
+      [this.selectValue]: "inputText",
+      required: this.props.item.required
     }
+  }
+  componentDidMount(){
+    this[this.props.item._id].focus();
   }
   deleteThisDragCategory(event) {
     event.preventDefault();
@@ -39,27 +47,22 @@ export default class dragCategory extends Component {
   }
   handleChangeSelect(event, index, value) {
     this.setState({[this.selectValue]: value});
-    Columns.update(this.props.column._id,{
+    Columns.update(this.props.item._id,{
       $set: {columnType: value}
     });
   }
-  handleChange(event, index, value) {
-    this.setState({optionsState: value});
+  handleChange(event) {
+    this.setState({[this.textValue]: event.target.value});
   }
   render() {
     return (
-      <section id="dragCategory" className="inline">
-        <div>
-          <a className="delete" onClick={this.deleteThisDragCategory.bind(this)}>
-            &times;
-          </a>
-          <div className="formInput input-field">
-            <TextField floatingLabelText="Category Title" className="catName"  id={this.props.column._id} value={this.state[this.textValue]} onChange={this.handleChange.bind(this)} />
+      <Paper id="dragCategory" className="dragCategoryItem" zDepth={2}>
+        <div className="inlineBlock">
+          <div className="formInput input-field inlineBlock">
+            <TextField floatingLabelText="Label" className="catName" autoFocus id={this.props.item._id} value={this.state[this.textValue]} onChange={this.handleChange.bind(this)} />
           </div>
-        </div>
-        <div>
-          <div className="input-field inline">
-            <SelectField floatingLabelText="typeColumn" value={this.state[this.selectValue]} onChange={this.handleChangeSelect.bind(this)} >
+          <div className="input-field inlineBlock">
+            <SelectField floatingLabelText="Type" value={this.state[this.selectValue]} floatingLabelFixed={true} onChange={this.handleChangeSelect.bind(this)} >
               <MenuItem value={"fixedValue"} primaryText="Fixed value" />
               <MenuItem value={"inputChbx"} primaryText="Input (checkbox)" />
               <MenuItem value={"inputNum"} primaryText="Input (numeric)" />
@@ -67,18 +70,23 @@ export default class dragCategory extends Component {
               <MenuItem value={"select"} primaryText="Select" />
             </SelectField>
           </div>
-          <Checkbox
-            label="Visible in List"
-            style={chbxStyles.checkbox}
-          />
-          <div className="formInput inline">
-            <RaisedButton primary={true} label="Add To Category" />
+        </div>
+        <div>
+          <div className="input-field inlineBlock">
+            <Checkbox
+              label="Required"
+              style={chbxStyles.checkbox}
+              defaultChecked={this.state.required}
+            />
+          </div>
+          <div className="input-field inlineBlock">
+            <Checkbox
+              label="Visible in List"
+              style={chbxStyles.checkbox}
+              />
           </div>
         </div>
-        <div className="formInput inline">
-          <RaisedButton secondary={true} label="Save Category" />
-        </div>
-      </section>
+      </Paper>
     );
   }
 }

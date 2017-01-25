@@ -9,19 +9,22 @@ import { Columns } from '../../api/columns.js';
 import { Templates } from '../../api/templates.js';
 import { DragCategories } from '../../api/dragCategories.js';
 // imports -> ui imports
-import Column from '../components/Column.jsx';
-import ColumnHeader from '../components/ColumnHeader.jsx';
-import DragCategory from '../components/DragCategory.jsx';
-import Loading from '../components/loading.jsx';
-import TemplateForm from '../components/TemplateForm.jsx'
-import TemplateTable from '../components/templateTable.jsx';
+import Column from '../components/Column';
+import ColumnHeader from '../components/ColumnHeader';
+import DragCategory from '../components/DragCategory';
+import DragCategoryItem from '../components/DragCategoryItem';
+import Loading from '../components/loading';
+import TemplateForm from '../components/TemplateForm'
+import TemplateTable from '../components/templateTable';
 
 import updateTemplate from '../../actions/updateTemplate';
 import updateColumn from '../../actions/addColumn';
 
 // material-ui imports
 import AppBar from 'material-ui/AppBar';
+import Dialog from 'material-ui/Dialog';
 import Drawer from 'material-ui/Drawer';
+import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {grey50, grey400, grey800} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
@@ -63,15 +66,27 @@ export default class TemplatePage extends Component {
     this.props.open = false;
     this.state = {
       open: false,
-      tableClass: "templateTableHeader"
+      tableClass: "templateTableHeader",
+      editorClass: "sidebar-editor",
+      openDialog: false,
+      categoryTitle: '',
+      autoFocus: '',
+      dragCategoryItems: []
     };
     Store.dispatch({type: 'HIDE_DOCK'});
   }
   componentWillMount(){
-    setTimeout(this.setState({'tableClass': 'templateTableHeader ready'}), 5000);
+    setTimeout(this.setState({'tableClass': 'templateTableHeader ready', 'editorClass': 'sidebar-editor ready'}), 5000);
   }
   handleClick () {
     this.setState({open: !this.state.open});
+  }
+  handleClose (event) {
+    event.preventDefault();
+    this.setState({openDialog: false});
+  }
+  handleChange(event, index, value) {
+    this.setState({categoryTitle: event.target.value});
   }
   addColumn(event){
     event.preventDefault();
@@ -86,17 +101,23 @@ export default class TemplatePage extends Component {
   }
   addDragCategory(event){
     event.preventDefault();
-    DragCategories.insert({
-      createdAt: new Date(), // current time
-      dragCategoryTitle: '',
-      templateId: this.props.templateId,
-      saved: false
-    });
+    this.setState({openDialog: true, autoFocus: "autoFocus"});
   }
   renderDragCategories() {
     return this.props.dragCategories.map((dragCategory) => (
       <DragCategory key={dragCategory._id} column={dragCategory} />
     ));
+  }
+  renderDragCategoryItems (){
+    return this.state.dragCategoryItems.map((dragCategoryItem) => (
+      <DragCategoryItem key={dragCategoryItem._id} item={dragCategoryItem} />
+    ));
+  }
+  addData(){
+    const DragCategoryItem = this.state.dragCategoryItems;
+    var timeInMs = Date.now();
+    DragCategoryItem.push({_id: 'new_'+timeInMs, type:'', value:'', required:true, visible: false});
+    this.setState({dragCategoryItems: DragCategoryItem});
   }
 
   renderColumns() {
@@ -115,10 +136,22 @@ export default class TemplatePage extends Component {
     ));
   }
   render() {
-
+    const actions = [
+        <FlatButton
+          label="Cancel"
+          primary={true}
+          onTouchTap={this.handleClose.bind(this)}
+        />,
+        <RaisedButton
+          label="Save Category"
+          primary={true}
+          keyboardFocused={true}
+          onTouchTap={this.handleClose.bind(this)}
+        />,
+    ];
     return (
       <div className="container">
-        <div className="sidebar-editor">
+        <div className={this.state.editorClass}>
           <Paper zDepth={3} style={style2} >
               <Tabs >
                 <Tab label="Table">
@@ -147,6 +180,19 @@ export default class TemplatePage extends Component {
         <div className={this.state.tableClass}>
           {this.renderTemplateTable()}
         </div>
+        <Dialog title="Drag Category" actions={actions} modal={false} open={this.state.openDialog} onRequestClose={this.handleClose} autoScrollBodyContent={true}>
+          <div  style={{minHeight:"500px"}}>
+            <div className="formInput input-field">
+              <TextField floatingLabelText="Category Title" className="catName"  id={"categoryTitle"} value={this.state.categoryTitle} onChange={this.handleChange.bind(this)} />
+            </div>
+            <div className="categories">
+              {this.renderDragCategoryItems()}
+            </div>
+            <div className="formInput inline">
+              <RaisedButton primary={true} label="Add data To category" onClick={this.addData.bind(this)} />
+            </div>
+          </div>
+        </Dialog>
       </div>
     );
   }

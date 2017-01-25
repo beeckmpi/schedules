@@ -13,7 +13,7 @@ import TemplatePage from '../pages/TemplatePage.jsx';
 
 const TemplatePageContainer = createContainer(({props, params}) => {
   const {templateId} = params;
-  const subscription = Meteor.subscribe('getColumns', 'getTemplates');
+  const subscription = Meteor.subscribe('getColumns', 'getTemplates', 'getDragCategories');
   return {
     templates: Templates.find({_id: templateId}).fetch(),
     columns: Columns.find({templateId: templateId}).fetch(),
