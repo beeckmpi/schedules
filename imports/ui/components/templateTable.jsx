@@ -32,15 +32,15 @@ export default class TemplateTable extends Component {
     const columnHeaders = [];
     switch (this.props.template.templateType) {
       case 'Nr.':
-        columnHeaders.push(<TableHeaderColumn key="number" style={{width: '7%'}}>Number</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="number" style={{width: "10%"}}>Number</TableHeaderColumn>);
         break;
       case 'Hour':
-        columnHeaders.push(<TableHeaderColumn key="Hour" style={{width: '7%'}}>Hour</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="Hour" style={{width: '10%'}}>Hour</TableHeaderColumn>);
         break;
       case 'Weeknr':
-        columnHeaders.push(<TableHeaderColumn key="Weekn" style={{width: '7%'}}>Week</TableHeaderColumn>);
-        columnHeaders.push(<TableHeaderColumn key="from" style={{width: '7%'}}>From</TableHeaderColumn>);
-        columnHeaders.push(<TableHeaderColumn key="to" style={{width: '7%'}}>To</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="Weekn" style={{width: "7%"}}>Week</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="from" style={{width: "13%"}}>From</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="to" style={{width: "13%"}}>To</TableHeaderColumn>);
         break;
     }
     return columnHeaders;
@@ -60,14 +60,14 @@ export default class TemplateTable extends Component {
       switch (this.props.template.templateType) {
         case 'Nr.':
           var number = x + 1;
-          text.push(<TableRowColumn key={number} style={{width: '7%'}}>{number}</TableRowColumn>);
+          text.push(<TableRowColumn key={number} style={{width: '10%'}}>{number}</TableRowColumn>);
           break;
         case 'Hour':
           var number = x + 1;
           if (number<=9){
             number = '0'+number;
           }
-          text.push(<TableRowColumn key={number} style={{width: '7%'}}>{number}:00</TableRowColumn>);
+          text.push(<TableRowColumn key={number} style={{width: '10%'}}>{number}:00</TableRowColumn>);
           break;
         case 'Weeknr':
           var number = x + 1;
@@ -75,9 +75,9 @@ export default class TemplateTable extends Component {
           var key_start = number+'_'+moment().week(number).unix();
           var date_end = moment().week(number+1).format('DD-MM-YYYY');
           var key_end = number+'_'+moment().week(number+1).unix();
-          text.push(<TableRowColumn key={number} style={{width: '7%'}}>{number}</TableRowColumn>);
-          text.push(<TableRowColumn key={key_start} style={{width: '7%'}}>{date_start}</TableRowColumn>);
-          text.push(<TableRowColumn key={key_end} style={{width: '7%'}}>{date_end}</TableRowColumn>);
+          text.push(<TableRowColumn key={number} style={{width: "7%"}}>{number}</TableRowColumn>);
+          text.push(<TableRowColumn key={key_start} style={{width: "13%"}}>{date_start}</TableRowColumn>);
+          text.push(<TableRowColumn key={key_end} style={{width: "13%"}}>{date_end}</TableRowColumn>);
           break;
         default:
           text.push(<TableRowColumn key={x} style={{width: '7%'}}></TableRowColumn>);
@@ -93,7 +93,7 @@ export default class TemplateTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fixedHeader: false,
+      fixedHeader: true,
       fixedFooter: false,
       stripedRows: false,
       showRowHover: false,
@@ -119,12 +119,12 @@ export default class TemplateTable extends Component {
               <TableRow>
                 <TableHeaderColumn className="templateTableHeaderTitle"  style={{fontSize: '22px'}} colSpan={this.props.columnCounter}>{this.props.template.templateTableHeader}</TableHeaderColumn>
               </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={this.state.showCheckboxes} deselectOnClickaway={this.state.deselectOnClickaway} showRowHover={this.state.showRowHover} stripedRows={this.state.stripedRows}>
               <TableRow selectable={false}>
                 {this.renderSpecialColumnHeaders()}
                 {this.renderColumnHeaders()}
               </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={this.state.showCheckboxes} deselectOnClickaway={this.state.deselectOnClickaway} showRowHover={this.state.showRowHover} stripedRows={this.state.stripedRows}>
               {this.renderRows()}
             </TableBody>
           </Table>

@@ -16,12 +16,12 @@ const styles = {
   },
 };
 const style = {
+  zIndex: '1000',
   padding: '15px 15px',
   display: 'inline-block',
   width: '350px',
-  maxHeight: '250px',
-  overflow: 'hidden',
-  position: 'relative'
+  maxHeight: '258px',
+  position: 'relative',
 };
 const deleteStyle = {
   position: 'absolute',
@@ -35,9 +35,9 @@ const deleteStyleView = {
   top: '-10px',
   cursor: 'pointer'
 }
-const show = {height: "auto", position: "absolute", top: '9px', width: "330px", transition: 'all .15s ease .50s'}
-const hideView = {position: "absolute", top: '250px', width:'350px', transition: 'all .25s ease .25s'}
-const hideEdit = {position: "absolute", top: '-250px', width:'350px', transition: 'all .15s ease'}
+const show = {height: "auto", position: "absolute", top: '9px', width: "330px", transition: 'all .15s ease .50s', display: 'inherit', zIndex: '1000'};
+const hideView = {position: "absolute", left: '-350px', width:'350px', height: '55px', transition: 'all .25s ease .25s', display:'none'}
+const hideEdit = {position: "absolute", left: '350px', width:'350px', transition: 'all .15s ease', display:'none'}
 
 const editStyleView = {
   position: 'absolute',
@@ -108,8 +108,9 @@ export default class Column extends Component {
     });
   }
   render() {
+    style.zIndex= this.props.zIndex;
     return (
-      <Paper zDepth={2} style={style} className={this.state.columnInfo}>
+      <Paper zDepth={1} style={style} className={this.state.columnInfo}>
         <section className="edit" style={this.state[this.edit]}>
           <div className="ColumnEdit">
             <IconButton tooltip="Delete Column" style={deleteStyle} onClick={this.deleteThisColumn.bind(this)}>

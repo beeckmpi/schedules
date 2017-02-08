@@ -121,9 +121,12 @@ export default class TemplatePage extends Component {
   }
 
   renderColumns() {
-    return this.props.columns.map((column) => (
-      <Column key={column._id} column={column} />
-    ));
+    var zIndex = 1000;
+    var columns = this.props.columns.map((column) => {
+      zIndex = zIndex-1;
+      return <Column key={column._id} zIndex={zIndex} column={column} />
+    });
+    return columns;
   }
   renderTemplateForm() {
     return this.props.templates.map((template) => (
