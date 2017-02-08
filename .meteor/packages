@@ -26,3 +26,4 @@ msavin:mongol
 accounts-google@1.0.11
 accounts-password@1.3.3
 samy:redux-middlewares
+momentjs:moment

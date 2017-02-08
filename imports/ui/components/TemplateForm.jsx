@@ -29,12 +29,48 @@ export default class TemplateForm extends Component {
   handleChangeSelectTemplateType(event, index, value) {
     this.setState({templateType: value});
     template = {templateType: value};
+    switch (value) {
+      case 'Hour':
+        this.setState({templateRows: 24});
+        template = {templateType: value, templateRows: 24};
+        break;
+      case 'Weeknr':
+        this.setState({templateRows: moment().isoWeeksInYear()});
+        template = {templateType: value, templateRows: moment().isoWeeksInYear()};
+      break;
+    }
     Meteor.call('templates.update', this.props.template._id, template);
   }
   handleChangeSelectTemplateRows(event, index, value) {
     this.setState({templateRows: value});
     template = {templateRows: value};
     Meteor.call('templates.update', this.props.template._id, template);
+  }
+  renderTemplateRows(event){
+    var menuItems = "";
+    const items = [];
+    switch (this.state.templateType){
+      case 'Hour':
+        items.push(<MenuItem key={12} value={12} primaryText="12" />);
+        items.push(<MenuItem key={24} value={24} primaryText="24" />);
+      break;
+      case 'Weeknr':
+        for(x=1; x<=moment().isoWeeksInYear(); x++){
+          items.push(<MenuItem key={x} value={x} primaryText={x} />);
+        }
+        break;
+      default:
+      for(x=0; x<=50; x=x+5){
+        if (x==0) {
+          x = 1;
+        }
+        items.push(<MenuItem key={x} value={x} primaryText={x} />);
+        if (x==1) {
+          x = 0;
+        }
+      }
+    }
+    return items;
   }
   render() {
     return (
@@ -56,13 +92,9 @@ export default class TemplateForm extends Component {
            </SelectField>
         </div>
         <div>
-            <SelectField floatingLabelText="Show Rows" style={{width: '100%'}} id="templateRows" value={this.state.templateRows} onChange={this.handleChangeSelectTemplateRows.bind(this)} >
-              <MenuItem value={5} primaryText="5" />
-              <MenuItem value={10} primaryText="10" />
-              <MenuItem value={15} primaryText="15" />
-              <MenuItem value={20} primaryText="20" />
-              <MenuItem value={40} primaryText="40" />
-             </SelectField>
+          <SelectField floatingLabelText="Show Rows (in example)" style={{width: '100%'}} id="templateRows" value={this.state.templateRows} onChange={this.handleChangeSelectTemplateRows.bind(this)} >
+            {this.renderTemplateRows()}
+          </SelectField>
         </div>
       </section>
     );
