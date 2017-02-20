@@ -7,6 +7,7 @@ import ColumnHeader from '../components/ColumnHeader.jsx';
 import Paper from 'material-ui/Paper';
 import Delete from 'material-ui/svg-icons/action/delete';
 import Create from 'material-ui/svg-icons/content/create';
+import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import {grey400, grey800} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
@@ -39,8 +40,8 @@ export default class TemplateTable extends Component {
         break;
       case 'Weeknr':
         columnHeaders.push(<TableHeaderColumn key="Weekn" style={{width: "7%"}}>Week</TableHeaderColumn>);
-        columnHeaders.push(<TableHeaderColumn key="from" style={{width: "13%"}}>From</TableHeaderColumn>);
-        columnHeaders.push(<TableHeaderColumn key="to" style={{width: "13%"}}>To</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="from" style={{width: "10%"}}>From</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="to" style={{width: "10%"}}>To</TableHeaderColumn>);
         break;
     }
     return columnHeaders;
@@ -83,7 +84,30 @@ export default class TemplateTable extends Component {
           text.push(<TableRowColumn key={x} style={{width: '7%'}}></TableRowColumn>);
       }
       columns.forEach(function(item, index){
-        text.push(<TableRowColumn key={index} />);
+        var optional = '';
+        switch (item.columnType) {
+          case 'Draggable':
+            optional = <div style={{color:"#ccc"}}>{item.optionalValue}</div>
+          break;
+          case 'linkedDraggable':
+            optional = <div style={{color:"#ccc"}}>{item.optionalValue}</div>
+          break;
+          case 'fixedValue':
+            optional = <div>{item.optionalValue}</div>
+          break;
+          case 'inputChbx':
+            optional = <Checkbox
+              defaultChecked={item.checked}
+            />
+          break;
+          case 'inputNum':
+            optional = <TextField hintText="Number" id={item._id} type="number"  value=""  />
+          break;
+          case 'inputText':
+            optional = <TextField id={item._id} type="text"  value=""  />
+          break;
+        }
+        text.push(<TableRowColumn key={index}>{optional}</TableRowColumn>);
       });
 
       rows.push(<TableRow  striped={true} key={x}>{text}</TableRow>);

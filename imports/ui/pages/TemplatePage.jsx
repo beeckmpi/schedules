@@ -8,6 +8,7 @@ import Store from '../../store/store';
 import { Columns } from '../../api/columns.js';
 import { Templates } from '../../api/templates.js';
 import { DragCategories } from '../../api/dragCategories.js';
+import { DragCategoryItems } from '../../api/dragCategoryItems.js';
 // imports -> ui imports
 import Column from '../components/Column';
 import ColumnHeader from '../components/ColumnHeader';
@@ -104,27 +105,46 @@ export default class TemplatePage extends Component {
     this.setState({openDialog: true, autoFocus: "autoFocus"});
   }
   renderDragCategories() {
+    const dragCategoryItems = this.props.dragCategoryItems;
     return this.props.dragCategories.map((dragCategory) => (
-      <DragCategory key={dragCategory._id} column={dragCategory} />
+      <DragCategory key={dragCategory._id} dragCategory={dragCategory} dragCategoryItems={dragCategoryItems}/>
     ));
+  }
+  onDelete(item) {
+    const DragCategoryItem = this.state.dragCategoryItems;
+    var index = DragCategoryItem.indexOf(item);
+    DragCategoryItem.splice(index, 1);
+    this.setState({dragCategoryItems: DragCategoryItem});
   }
   renderDragCategoryItems (){
     return this.state.dragCategoryItems.map((dragCategoryItem) => (
-      <DragCategoryItem key={dragCategoryItem._id} item={dragCategoryItem} />
+      <DragCategoryItem key={dragCategoryItem._id} item={dragCategoryItem} onDelete={(item) => this.onDelete(item)} />
     ));
   }
   addData(){
     const DragCategoryItem = this.state.dragCategoryItems;
     var timeInMs = Date.now();
-    DragCategoryItem.push({_id: 'new_'+timeInMs, type:'', value:'', required:true, visible: false});
+    var order = Object.keys(DragCategoryItem).length;
+    DragCategoryItem.push({_id: 'new_'+timeInMs, templateId: this.props.templateId, type:'', name:'', required:true, visible: false, order: order});
     this.setState({dragCategoryItems: DragCategoryItem});
   }
+  saveCategory() {
+    if(this.state.categoryTitle!=''){
+      DragCategories.insert({name: this.state.categoryTitle, templateId: this.props.templateId, createdAt: new Date()});
+      const category = this.state.categoryTitle;
+      this.state.dragCategoryItems.map(function(dragCategory){
+        dragCategory['category']= category;
+        DragCategoryItems.insert(dragCategory);
+      });
+      this.setState({openDialog: false});
+    }
 
+  }
   renderColumns() {
     var zIndex = 1000;
     var columns = this.props.columns.map((column) => {
       zIndex = zIndex-1;
-      return <Column key={column._id} zIndex={zIndex} column={column} />
+      return <Column key={column._id} zIndex={zIndex} column={column} dragCategories={this.props.dragCategories} dragCategoryItems={this.props.dragCategoryItems} />
     });
     return columns;
   }
@@ -149,7 +169,7 @@ export default class TemplatePage extends Component {
           label="Save Category"
           primary={true}
           keyboardFocused={true}
-          onTouchTap={this.handleClose.bind(this)}
+          onTouchTap={this.saveCategory.bind(this)}
         />,
     ];
     return (
@@ -203,8 +223,8 @@ export default class TemplatePage extends Component {
 TemplatePage.propTypes = {
   columns: PropTypes.array.isRequired,
   dragCategories:  PropTypes.array.isRequired,
+  dragCategoryItems:  PropTypes.array.isRequired,
   columnCounter: PropTypes.number.isRequired,
   templateId: PropTypes.string.isRequired,
-  templates: PropTypes.array.isRequired,
-  subscriptionReady: React.PropTypes.bool,
+  templates: PropTypes.array.isRequired
 };

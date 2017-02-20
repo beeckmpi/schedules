@@ -19,7 +19,7 @@ header {
   text-transform: uppercase;
 }
 .columnEditPaper {
-  height: 65px;
+  height: auto;
   width: 330px;
   transition: all 0.15s ease;
 }
@@ -27,7 +27,7 @@ header {
   height: 55px;
 }
 .columnEditPaper.edit {
-  height: 230px;
+  min-height: 275px;
 }
 .columnEditPaper.edit .view {
   top: 6px;
@@ -97,6 +97,7 @@ select {
 .dragCategoryItem {
   padding: 0px 15px 5px 15px;
   margin: 3px 0px 10px 0px;
+  position: relative;
 }
 #templateTable {
   min-width: 50%;
