@@ -90,7 +90,7 @@ export default class TemplateTable extends Component {
             optional = <div style={{color:"#ccc"}}>{item.optionalValue}</div>
           break;
           case 'linkedDraggable':
-            optional = <div style={{color:"#ccc"}}>{item.optionalValue}</div>
+            optional = <div style={{color:"#ccc"}}>{item.optionalValue} <span style={{fontSize:"xx-small"}}>(linked)</span></div>
           break;
           case 'fixedValue':
             optional = <div>{item.optionalValue}</div>

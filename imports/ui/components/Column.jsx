@@ -21,7 +21,6 @@ const style = {
   padding: '15px 15px',
   display: 'inline-block',
   width: '350px',
-  maxHeight: '358px',
   position: 'relative',
 };
 const deleteStyle = {
@@ -37,7 +36,7 @@ const deleteStyleView = {
   cursor: 'pointer'
 }
 const show = {height: "auto", position: "absolute", top: '9px', width: "330px", transition: 'all .15s ease .50s', display: 'inherit', zIndex: '1000'};
-const hideView = {position: "absolute", left: '-350px', width:'350px', height: '55px', transition: 'all .25s ease .25s', display:'none'}
+const hideView = {position: "absolute", left: '-350px', width:'350px', transition: 'all .25s ease .25s', display:'none'}
 const hideEdit = {position: "absolute", left: '350px', width:'350px', minHeight: '120px', transition: 'all .15s ease', display:'none'}
 
 const editStyleView = {
@@ -91,6 +90,8 @@ export default class Column extends Component {
       [this.optionalValue]: this.props.column.optionalValue,
       [this.edit]: this.editVar,
       [this.view]: this.viewVar,
+      [this.editId]: this.edit,
+      [this.viewId]: this.view,
       checked: this.props.column.optionalValue,
       columnInfo: this.columnInfo
     }
@@ -185,12 +186,14 @@ export default class Column extends Component {
     Columns.update(this.props.column._id,{
       $set: {saved: false}
     });
+    let height = document.getElementById(this.state[this.editId]).clientHeight;
+    style.height = height;
   }
   render() {
     style.zIndex= this.props.zIndex;
     return (
       <Paper zDepth={1} style={style} className={this.state.columnInfo}>
-        <section className="edit" style={this.state[this.edit]}>
+        <section className="edit" id={this.state[this.editId]} style={this.state[this.edit]}>
           <div className="ColumnEdit">
             <IconButton tooltip="Delete Column" style={deleteStyle} onClick={this.deleteThisColumn.bind(this)}>
               <Delete color={grey400} hoverColor={grey800} />
@@ -218,7 +221,7 @@ export default class Column extends Component {
               <RaisedButton primary={true} label="Save Column" onClick={this.saveColumn.bind(this)} />
             </div>
           </section>
-          <section className="view" style={this.state[this.view]}>
+          <section className="view" id={this.state[this.viewId]} style={this.state[this.view]}>
             <IconButton tooltip="Delete Column" style={deleteStyleView} onClick={this.deleteThisColumn.bind(this)}>
               <Delete color={grey400} hoverColor={grey800} />
             </IconButton>
@@ -226,7 +229,7 @@ export default class Column extends Component {
               <Create color={grey400} hoverColor={grey800} />
             </IconButton>
             <div>{this.props.column.columnTitle}</div>
-            <div style={{fontSize: 'x-small'}}>{this.props.column.columnType}</div>
+            <div style={{fontSize: 'x-small'}}>{this.props.column.columnType} -> {this.props.column.optionalValue}</div>
           </section>
       </Paper>
     );
