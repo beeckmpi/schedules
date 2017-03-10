@@ -39,9 +39,9 @@ export default class TemplateTable extends Component {
         columnHeaders.push(<TableHeaderColumn key="Hour" style={{width: '10%'}}>Hour</TableHeaderColumn>);
         break;
       case 'Weeknr':
-        columnHeaders.push(<TableHeaderColumn key="Weekn" style={{width: "7%"}}>Week</TableHeaderColumn>);
-        columnHeaders.push(<TableHeaderColumn key="from" style={{width: "10%"}}>From</TableHeaderColumn>);
-        columnHeaders.push(<TableHeaderColumn key="to" style={{width: "10%"}}>To</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="Weekn" style={{width: "15px"}}>Week</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="from" style={{width: "67px"}}>From</TableHeaderColumn>);
+        columnHeaders.push(<TableHeaderColumn key="to" style={{width: "67px"}}>To</TableHeaderColumn>);
         break;
     }
     return columnHeaders;
@@ -134,9 +134,9 @@ export default class TemplateTable extends Component {
   render() {
     return (
       <section id="content">
-          <h2>
+        <h3>
            {this.props.template.templateTitle}
-         </h2>
+        </h3>
          <Paper id="table" style={paperTableStyle} zDepth={3}>
           <Table id="templateTable" style={tableStyle} fixedHeader={this.state.fixedHeader} fixedFooter={this.state.fixedFooter} selectable={this.state.selectable} multiSelectable={this.state.multiSelectable}>
             <TableHeader displaySelectAll={this.state.showCheckboxes} adjustForCheckbox={this.state.showCheckboxes} enableSelectAll={this.state.enableSelectAll}>

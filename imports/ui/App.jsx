@@ -15,6 +15,9 @@ import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import HomeIcon from 'material-ui/svg-icons/action/home';
+import AccountCircleIcon from 'material-ui/svg-icons/action/account-circle';
+import AssignmentIcon from 'material-ui/svg-icons/action/assignment';
+import SettingsIcon from 'material-ui/svg-icons/action/settings';
 import MenuItem from 'material-ui/MenuItem';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -46,13 +49,6 @@ export default class App extends Component {
     this.setState({open: false});
   }
   changeTitle (e) {
-    if (e.target.title == 'Schedules') {
-      var docked = true;
-      var open = false;
-    } else {
-      var docked = false;
-      var open = false;
-    }
     this.setState({title: e.target.title, docked: docked, open: open});
   }
   render() {
@@ -61,23 +57,23 @@ export default class App extends Component {
     let loggedIn = (currentUser && userDataAvailable);
     return (
         <MuiThemeProvider>
-            <div className="container">
-              <Drawer docked={this.props.docked} zDepth={0} width={300} open={this.props.docked} containerStyle={{top: '65px', backgroundColor: '#E0E0E0'}} color={grey300} onRequestChange={(open) => this.setState({open})} >
-                <MenuItem  leftIcon={<HomeIcon />}><Link to="/" title="Schedules" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Home</Link></MenuItem>
-                <MenuItem><Link to="/template" title="New Template" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block'}}>Template</Link></MenuItem>
-                <MenuItem onTouchTap={this.handleClose.bind(this)}>Menu Item 2</MenuItem>
-              </Drawer>
-              <AppBar
-                title={this.state.title}
-                iconElementLeft={<IconButton onTouchTap={this.handleClick.bind(this)}><MenuIcon  color={grey50} /></IconButton>}
-                iconElementRight={<FlatButton label={ loggedIn ? 'Welcome '+currentUser.profile.firstname+' '+currentUser.profile.name : 'Sign In' } />}
-                style={{position: 'fixed'}}
-                id="Default AppBar"
-              />
-              <section id="content" style={{paddingTop: '60px'}}>
+          <div>
+            <div id="sideMenu" style={{position:"fixed", left:"0px", top:"0px", bottom: "0px", width: "40px", paddingTop: "20px", paddingLeft:"10px", zIndex:"120", background:"#263238" }}>
+              <div id="top">
+                <Link to="/" title="Home" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block', color: "#ffffff"}}><HomeIcon style={{color:"#fff", fontSize:"larger", marginBottom:"15px"}}/></Link>
+                <Link to="/" title="Schedules" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block', color: "#ffffff"}}><AssignmentIcon style={{color:"#fff", fontSize:"larger", marginBottom:"15px"}}/></Link>
+              </div>
+              <div id="bottom" style={{position: "fixed", bottom:"30px"}}>
+                <Link to="/" title="Account settings" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block', color: "#ffffff"}}><AccountCircleIcon style={{color:"#fff", fontSize:"larger", marginBottom:"15px"}}/></Link>
+                <Link to="/" title="Settings" onTouchTap={this.changeTitle.bind(this)} style={{display: 'block', color: "#ffffff"}}><SettingsIcon style={{color:"#fff", fontSize:"larger"}}/></Link>
+              </div>
+            </div>
+            <div className="container" style={{marginLeft:"50px"}}>
+              <section id="content">
                 {this.props.children}
               </section>
             </div>
+          </div>
         </MuiThemeProvider>
     );
   }

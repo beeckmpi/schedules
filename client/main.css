@@ -3,10 +3,11 @@ body
   margin: 0 0;
   padding: 0 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #E0E0E0;
+  background-color: #37474F;
+  color:#fff;
 }
 header {
-  background-color: #00897B;
+  background-color: #37474F;
   color:#fff;
   height: 40px;
   padding: 10px 40px 2px;
@@ -21,13 +22,45 @@ header {
 .columnEditPaper {
   height: auto;
   width: 330px;
-  transition: all 0.15s ease;
 }
+
 .columnEditPaper.view {
   min-height: 55px;
 }
 .columnEditPaper.edit {
   min-height: 275px;
+  transition: all .3s ease .3s;
+  animation: editmove .3s;
+}
+@keyframes editmove {
+    0%   {height: 55px}
+    10% {height: 75px}
+    20% {height: 95px}
+    30% {height: 115px}
+    40% {height: 135px}
+    50% {height: 155px}
+    60% {height: 175px}
+    70% {height: 195px}
+    80% {height: 215px}
+    90% {height: 245px}
+    100% {height: 275px}
+}
+.columnEditPaper .edit {
+  transition: all .5s ease .5s;
+  animation: editmoveOpactity .53s;
+}
+@keyframes editmoveOpactity {
+    0%  {opacity: 0}
+    10% {opacity: 0.1}
+    20% {opacity: 0.2}
+    30% {opacity: 0.3}
+    40% {opacity: 0.4}
+    50% {opacity: 0.5}
+    60% {opacity: 0.6}
+    70% {opacity: 0.7}
+    80% {opacity: 0.8}
+    90% {opacity: 0.9}
+    100% {opacity: 1}
 }
 .columnEditPaper.edit .view {
   top: 6px;
@@ -52,7 +85,7 @@ header {
     100% {left: 0}
 }
 .templateTableHeader.ready {
-  left: 0;
+  left: 30px;
   position: absolute;
 }
 #content {
@@ -163,7 +196,7 @@ input:-webkit-autofill:active {
   right: -500px;
   width: 28%;
   z-index: 500;
-  padding: 15px;
+  padding: 4px 18px 4px 0px;
   overflow-y: scroll;
   transition: all .3s ease .3s;
   animation: sidebar-move .3s;

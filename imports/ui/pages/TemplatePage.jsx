@@ -173,7 +173,7 @@ export default class TemplatePage extends Component {
         />,
     ];
     return (
-      <div className="container">
+      <div className="container" style={{marginLeft:"50px"}}>
         <div className={this.state.editorClass}>
           <Paper zDepth={3} style={style2} >
               <Tabs >

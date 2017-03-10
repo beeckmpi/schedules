@@ -69,7 +69,7 @@ export default class Home extends Component {
     let currentUser = this.props.currentUser;
     return (
       <section id="home">
-        <h3 style={{marginLeft: '300px'}}>My Templates</h3>
+        <h3 style={{marginLeft: '0px'}}>My Templates</h3>
         {this.renderTemplates()}
         <div className="bottomRightMenu">
           <FloatingActionButton style={floatingButtonStyleStart}>

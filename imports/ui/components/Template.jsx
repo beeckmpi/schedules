@@ -8,7 +8,7 @@ const paperTableStyle = {
   minWidth: '50%',
   maxWidth: '70%',
   marginBottom: '20px',
-  marginLeft: '300px',
+  marginLeft: '0px',
   padding: '8px 8px',
   marginTop: '15px'
 }
