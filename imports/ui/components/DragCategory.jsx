@@ -48,7 +48,7 @@ export default class dragCategory extends Component {
   renderDragCategoryItems(){
 
     return this.props.dragCategoryItems.map((dragCategoryItem) => (
-      <li>{dragCategoryItem.name} - ({dragCategoryItem.type})</li>
+      <li key={dragCategoryItem._id}>{dragCategoryItem.name} - ({dragCategoryItem.type})</li>
     ));
   }
   render() {

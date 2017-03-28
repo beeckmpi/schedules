@@ -2,7 +2,6 @@
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { connect }  from 'react-redux';
-import reactMixin from 'react-mixin';
 
 // imports -> api -> imports
 import { Columns } from '../../api/columns.js';
@@ -14,7 +13,6 @@ import TemplatePage from '../pages/TemplatePage.jsx';
 
 const TemplatePageContainer = createContainer(({props, params}) => {
   const {templateId} = params;
-
   return {
     templates: Templates.find({_id: templateId}).fetch(),
     columns: Columns.find({templateId: templateId}).fetch(),

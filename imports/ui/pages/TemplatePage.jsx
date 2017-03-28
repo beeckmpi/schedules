@@ -144,7 +144,16 @@ export default class TemplatePage extends Component {
     var zIndex = 1000;
     var columns = this.props.columns.map((column) => {
       zIndex = zIndex-1;
-      return <Column key={column._id} zIndex={zIndex} column={column} dragCategories={this.props.dragCategories} dragCategoryItems={this.props.dragCategoryItems} />
+      return <Column
+        key={column._id}
+        zIndex={zIndex}
+        column={column}
+        draggable="true"
+        onDragStart={this.handleDragStart}
+        onDragEnter={this.handleDragEnter.bind(this)}
+        dragCategories={this.props.dragCategories}
+        dragCategoryItems={this.props.dragCategoryItems}
+      />
     });
     return columns;
   }
@@ -157,6 +166,15 @@ export default class TemplatePage extends Component {
     return this.props.templates.map((template) => (
       <TemplateTable key={this.props.templateId} template={template} columns={this.props.columns} columnCounter={this.props.columnCounter} />
     ));
+  }
+
+  handleDragEnter(event){
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }
+  handleDragOver(event){
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
   }
   render() {
     const actions = [
@@ -185,7 +203,7 @@ export default class TemplatePage extends Component {
                     <div>
                       <RaisedButton onClick={this.addColumn.bind(this)} primary={true} label="Add Column" style={style} />
                     </div>
-                    <div>{this.renderColumns()}</div>
+                    <div onDragOver={this.handleDragOver.bind(this)} style={{padding:"10px 0px"}} id="columnsId">{this.renderColumns()}</div>
                   </section>
                 </Tab>
                 <Tab label="Categories" >

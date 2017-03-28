@@ -9,7 +9,7 @@ const logger = createLogger();
 const enhancers = [
   applyMiddleware(ReduxThunk, logger)
 ];
-
-const Store = createStore(rootReducer, composeWithDevTools(...enhancers));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const Store = createStore(rootReducer, composeEnhancers(...enhancers));
 
 export default Store;

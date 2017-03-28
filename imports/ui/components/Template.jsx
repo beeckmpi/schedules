@@ -14,12 +14,6 @@ const paperTableStyle = {
 }
 // template component - represents a single todo item
 export default class template extends Component {
-  toggleChecked() {
-    // Set the checked property to the opposite of its current value
-    templates.update(this.props.template._id, {
-      $set: { checked: !this.props.template.checked },
-    });
-  }
   loadUrl(){
     browserHistory.push('/template/'+this.props.template._id);
     Store.dispatch({type: 'HIDE_DOCK'});

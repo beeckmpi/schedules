@@ -46,8 +46,8 @@ export default class Home extends Component {
   }
 
   renderTemplates() {
-    return this.props.templates.map((template) => (
-      <Template key={template._id} template={template} />
+    return Object.keys(this.props.templatesRedux).map((key, template) => (
+      <Template key={key} template={this.props.templatesRedux[key]} />
     ));
   }
   createTemplate(event){
@@ -86,6 +86,3 @@ export default class Home extends Component {
     );
   }
 }
-Home.propTypes = {
-  templates: PropTypes.array.isRequired,
-};

@@ -49,7 +49,7 @@ export default class App extends Component {
     this.setState({open: false});
   }
   changeTitle (e) {
-    this.setState({title: e.target.title, docked: docked, open: open});
+    this.setState({title: e.target.title});
   }
   render() {
     let currentUser = this.props.currentUser;

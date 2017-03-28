@@ -54,6 +54,12 @@ const chbxStyles = {
     minWith: "256px"
   },
 };
+let dragged = '';
+let placeholder = document.createElement("div");
+placeholder.style.border = "1px solid #444";
+placeholder.style.minHeight = "50px";
+placeholder.style.width = "350px";
+placeholder.className = "placeholder";
 export default class Column extends Component {
   toggleChecked() {
     // Set the checked property to the opposite of its current value
@@ -68,6 +74,7 @@ export default class Column extends Component {
   }
   constructor(props) {
     super(props);
+
     this.optionsState = {value: 'draggable'};
     this.textValue = [this.props.column._id]+'_value';
     this.selectValue = [this.props.column._id]+'_selectValue';
@@ -189,10 +196,58 @@ export default class Column extends Component {
     let height = document.getElementById(this.state[this.editId]).clientHeight;
     style.height = height;
   }
+  handleDragStart(event){
+    dragged = event.currentTarget;
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData("text/html", event.currentTarget);
+    placeholder.height = dragged.offsetHeight;
+  }
+  handleDragEnd(event){
+    event.preventDefault();
+    dragged.style.display = "none";
+    event.dataTransfer.dropEffect = 'move';
+    this.over = event.target;
+    var relY = event.clientY - this.over.offsetTop;
+    var height = this.over.offsetHeight / 2;
+    var parent = document.getElementById("columnsId");
+    var data = event.dataTransfer.getData("text/html");
+    var next = event.target.nextElementSibling;
+    if(relY > height) {
+      dragged.style.display = "inherit";
+      parent.insertBefore(document.getElementById(data), document.getElementById(next.id));
+      placeholder.style.display = "none";
+    }
+    else if(relY < height) {
+      dragged.style.display = "inherit";
+      parent.insertBefore(document.getElementById(data), document.getElementById(event.target.id));
+      placeholder.style.display = "none";
+    }
+  }
+  handleDragOver(event){
+    event.preventDefault();
+    dragged.style.display = "none";
+    placeholder.style.display = "inherit";
+    event.dataTransfer.dropEffect = 'move';
+    this.over = event.target;
+    var relY = event.clientY - this.over.offsetTop;
+    var height = this.over.offsetHeight / 2;
+    var parent = event.target.parentNode;
+
+    if(relY > height) {
+      if(parent.id == "columnsId"){
+        parent.insertBefore(placeholder, event.target.nextElementSibling);
+      }
+    }
+    else if(relY < height) {
+      if(parent.id == "columnsId"){
+        parent.insertBefore(placeholder, event.target);
+      }
+    }
+  }
   render() {
     style.zIndex= this.props.zIndex;
     return (
-      <Paper zDepth={1} style={style} className={this.state.columnInfo}>
+      <Paper zDepth={1} style={style} className={this.state.columnInfo} draggable="true" onDragStart={this.handleDragStart.bind(this)} onDragEnd={this.handleDragEnd.bind(this)} onDragOver={this.handleDragOver.bind(this)}>
         <section className="edit" id={this.state[this.editId]} style={this.state[this.edit]}>
           <div className="ColumnEdit">
             <IconButton tooltip="Delete Column" style={deleteStyle} onClick={this.deleteThisColumn.bind(this)}>
