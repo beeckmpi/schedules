@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 
 // imports -> ui imports
 import Template from '../components/Template.jsx';
+import Loading from '../components/loading.jsx';
 
 import { Templates } from '../../api/templates.js';
 // material-ui imports
@@ -40,11 +41,8 @@ const floatingButtonStyle = {
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
+    
   }
-
   renderTemplates() {
     return Object.keys(this.props.templatesRedux).map((key, template) => (
       <Template key={key} template={this.props.templatesRedux[key]} />
@@ -66,11 +64,11 @@ export default class Home extends Component {
   }
 
   render() {
-    let currentUser = this.props.currentUser;
+    const { currentUser, loading } = this.props;
     return (
       <section id="home">
         <h3 style={{marginLeft: '0px'}}>My Templates</h3>
-        {this.renderTemplates()}
+          {loading ? <Loading key="loading"/> : this.renderTemplates()}
         <div className="bottomRightMenu">
           <FloatingActionButton style={floatingButtonStyleStart}>
             <ContentAdd />

@@ -79,7 +79,6 @@ export default class App extends Component {
   }
 }
 App.propTypes = {
-  templates: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   dragCategories:  PropTypes.array.isRequired,
   columnCounter: PropTypes.number.isRequired,

@@ -192,7 +192,7 @@ input:-webkit-autofill:active {
 .sidebar-editor {
   position: fixed;
   bottom: 0px;
-  top:65px;
+  top:56px;
   right: -500px;
   width: 28%;
   z-index: 500;

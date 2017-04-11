@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Columns } from '../../api/columns.js';
+import Store from '../../store/store';
 import { Templates } from '../../api/templates.js';
 import Column from '../components/Column.jsx';
 import ColumnHeader from '../components/ColumnHeader.jsx';
@@ -50,6 +51,12 @@ export default class TemplateTable extends Component {
     return this.props.columns.map((column) => (
       <Column key={column._id} column={column} />
     ));
+  }
+  handleChangeTitle(event) {
+    template = {"templateTitle": event.target.innerHTML};
+    this.props.template.templateTitle = event.target.innerHTML;
+    Store.dispatch({type: 'SET_TEMPLATE', data: this.props.template});
+    Meteor.call('templates.update', this.props.template._id, template);
   }
   renderRows() {
     var rows = [];
@@ -132,19 +139,21 @@ export default class TemplateTable extends Component {
   }
 
   render() {
+    const {columnCounter, template} = this.props;
+    const {deselectOnClickaway, enableSelectAll, fixedFooter, fixedHeader, multiSelectable, selectable, showCheckboxes, showRowHover, stripedRows} = this.state;
     return (
       <section id="content">
-        <h3>
-           {this.props.template.templateTitle}
+        <h3 contentEditable="true" onInput={this.handleChangeTitle.bind(this)}>
+           {template.templateTitle}
         </h3>
          <Paper id="table" style={paperTableStyle} zDepth={3}>
-          <Table id="templateTable" style={tableStyle} fixedHeader={this.state.fixedHeader} fixedFooter={this.state.fixedFooter} selectable={this.state.selectable} multiSelectable={this.state.multiSelectable}>
-            <TableHeader displaySelectAll={this.state.showCheckboxes} adjustForCheckbox={this.state.showCheckboxes} enableSelectAll={this.state.enableSelectAll}>
+          <Table id="templateTable" style={tableStyle} fixedHeader={fixedHeader} fixedFooter={fixedFooter} selectable={selectable} multiSelectable={multiSelectable}>
+            <TableHeader displaySelectAll={showCheckboxes} adjustForCheckbox={showCheckboxes} enableSelectAll={enableSelectAll}>
               <TableRow>
-                <TableHeaderColumn className="templateTableHeaderTitle"  style={{fontSize: '22px'}} colSpan={this.props.columnCounter}>{this.props.template.templateTableHeader}</TableHeaderColumn>
+                <TableHeaderColumn className="templateTableHeaderTitle"  style={{fontSize: '22px'}} colSpan={columnCounter}>{template.templateTableHeader}</TableHeaderColumn>
               </TableRow>
             </TableHeader>
-            <TableBody displayRowCheckbox={this.state.showCheckboxes} deselectOnClickaway={this.state.deselectOnClickaway} showRowHover={this.state.showRowHover} stripedRows={this.state.stripedRows}>
+            <TableBody displayRowCheckbox={showCheckboxes} deselectOnClickaway={deselectOnClickaway} showRowHover={showRowHover} stripedRows={stripedRows}>
               <TableRow selectable={false}>
                 {this.renderSpecialColumnHeaders()}
                 {this.renderColumnHeaders()}

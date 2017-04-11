@@ -10,7 +10,9 @@ Meteor.publish('getColumns', function () {
 Meteor.publish('getTemplates', function () {
   return Templates.find();
 });
-
+Meteor.publish('getTemplate', function (id) {
+  return Templates.find({_id: id});
+});
 Meteor.publish('getDragCategories', function () {
   return DragCategories.find();
 });

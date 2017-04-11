@@ -158,13 +158,13 @@ export default class TemplatePage extends Component {
     return columns;
   }
   renderTemplateForm() {
-    return this.props.templates.map((template) => (
-      <TemplateForm key={template._id} template={template} />
+    return Object.keys(this.props.templateRedux).map((key, template) => (
+      <TemplateForm key={"form_"+this.props.templateId} template={this.props.templateRedux[key]} />
     ));
   }
   renderTemplateTable () {
-    return this.props.templates.map((template) => (
-      <TemplateTable key={this.props.templateId} template={template} columns={this.props.columns} columnCounter={this.props.columnCounter} />
+    return Object.keys(this.props.templateRedux).map((key, template) => (
+      <TemplateTable key={"table_"+this.props.templateId} template={this.props.templateRedux[key]} columns={this.props.columns} columnCounter={this.props.columnCounter} />
     ));
   }
 
